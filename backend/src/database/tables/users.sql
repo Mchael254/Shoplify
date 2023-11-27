@@ -14,6 +14,6 @@ use Shopie
 --     isOrder bit DEFAULT 0
 -- )
 
-select * from Users
+-- select * from Users
 
 
