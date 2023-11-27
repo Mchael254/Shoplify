@@ -74,3 +74,54 @@ export const getAllproducts = async (req: Request, res: Response) => {
     });
   }
 };
+
+//update product
+export const updateproduct = async (req: Request, res: Response) => {
+  try {
+    let {
+      productID,
+      productName,
+      productDescription,
+      productPrice,
+      productCategory,
+      productImage,
+      supplierContact,
+      Quantity,
+    } = req.body;
+
+    const { error } = productUpdateValidationSchema.validate(req.body);
+
+    if (error) {
+      return res.status(400).json({ error: error.details[0].message });
+    }
+
+    const pool = await mssql.connect(sqlConfig);
+    const productDetails = await pool
+      .request()
+      .input("productID", mssql.VarChar, productID)
+      .input("productName", mssql.VarChar, productName)
+      .input("productDescription", mssql.VarChar, productDescription)
+      .input("productPrice", mssql.Int, productPrice)
+      .input("productCategory", mssql.VarChar, productCategory)
+      .input("productImage", mssql.VarChar, productImage)
+      .input("supplierContact", mssql.VarChar, supplierContact)
+      .input("Quantity", mssql.Numeric, Quantity)
+      .execute("updateProduct");
+
+    const assignmentResult = productDetails.recordset[0].updateResult;
+
+    if (assignmentResult === -1) {
+      return res.status(400).json({ error: "product does not exist" });
+    } else {
+      const updatedproductID = productDetails.recordset[0].UpdatedproductID;
+      return res.status(200).json({
+        message: "product updated successfully",
+        updatedproductID,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: error,
+    });
+  }
+};
