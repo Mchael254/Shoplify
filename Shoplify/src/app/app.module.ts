@@ -15,6 +15,7 @@ import { SignupComponent } from './signup/signup.component';
 import { SingleComponent } from './single/single.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { SearchPipe } from './pipes/search.pipe';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { HttpClientModule } from '@angular/common/http';
     PasswordResetComponent,
     SigninComponent,
     SignupComponent,
-    SingleComponent
+    SingleComponent,
+    SearchPipe
   ],
   imports: [
     BrowserModule,

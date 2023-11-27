@@ -13,36 +13,33 @@
 
     <div class="buttonss">
       <button class="side" (click)="addProduct()">Add Product</button>
-      <!-- <button class="side" (click)="fetchTours()">All Tours</button> -->
-      <button class="side" (click)="viewOutofstockProducts()">Out of Stock</button>
-      <button class="side" (click)="viewStockedProducts()">In Stock</button>
+      <button class="side" (click)="fetchProducts()">All products</button>
+      <!-- <button class="side" (click)="filterProducts('outOfStock')">Out of Stock</button> -->
+      <!-- <button class="side" (click)="filterProducts('inStock')">In Stock</button> -->
     </div>
   </div>
 
   <div *ngIf="productDashboard" class="product-dashboard">
-    <!-- tour cards -->
+    <!-- product cards -->
     <div class="buttonsss">
-      <p class="top">All Products<br /><span style="color: #9E9E9E">{{ allproductsCount }}</span></p>
-      <p class="top">Out of Stock <br /><span style="color: #4CAF50">{{ completedproductsCount }}</span></p>
-      <p class="top">In stock<br /><span style="color:#2196F3">{{ ongoingproductsCount }}</span></p>
+      <p class="top">All Products<br /><span style="color: #9E9E9E">{{ productCount }}</span></p>
+      <p class="top">Out of Stock <br /><span style="color: #4CAF50">{{ outOfStockCount }}</span></p>
+      <p class="top">In stock<br /><span style="color:#2196F3">{{ inStockCount }}</span></p>
       <p class="top">
         <span>
-          <input type="text" class="search" placeholder="Search Products"
-            style="border: solid 1px #a09e9e; height: 50px; width: 300px; text-align: center; font-size: large; border: 0px solid;"
-            [(ngModel)]="searchTearm" (input)="filterProducts()" />
+          <input type="text" placeholder="Search Product"
+          style="border: solid 1px #a09e9e; height: 50px; width: 300px; text-align: center; font-size: large; border: 0px solid;"
+          [(ngModel)]="searchTearm" (input)="filterProducts()" />
         </span>
       </p>
     </div>
 
-    <div *ngIf="filteredProducts" class="card-container">
-      <div *ngFor="let tour of filteredProducts" class="cards" (click)="productDetails(tour)">
-        <!-- <h4>{{ product.productName }}</h4> -->
-        <p><span style="font-weight: bold;">Products Bought: </span>{{ tour.numberOfTickets }}</p>
+    <div *ngIf="filteredProducts | search: searchTearm" class="card-container">
+      <div *ngFor="let product of filteredProducts" class="cards" (click)="productDetails(product)">
+        <h4>{{ product.productName }}</h4>
+        <img src="{{product.productImage}}">
         <p>
-          <!-- <span style="font-weight: bold;">Quantity: </span>{{ product.Quantity }} -->
-        </p>
-        <p>
-          <!-- <span style="font-weight: bold;">Available Products: </span>{{ product.Quantity - tour.numberOfTickets }} -->
+          <span style="font-weight: bold;">Quantity: </span>{{ product.Quantity }}
         </p>
       </div>
     </div>
@@ -104,7 +101,7 @@
   <!-- create product form -->
   <div *ngIf="showProductForm" class="product-form-container product-form-transition">
     <div class="product-form product-form-transition">
-      <form id="product-form">
+      <form id="product-form" (ngSubmit)="submitProductForm()">
         <p style="margin: 10px; color: blue;font-size: 20px;">{{ successAssign }}</p>
         <p style="margin: 10px; color: blue">{{ updateResponse }}</p>
         <p [style.color]="isWhichError ? 'blue' : 'red'">{{ errorResponse }}</p>
@@ -118,7 +115,7 @@
               [(ngModel)]="productForm.productName" required />
           </div>
           <div class="form-group">
-            <label for="tourImage">Product Image</label>
+            <label for="productImage">Product Image</label>
             <input type="text" id="productImage" placeholder="Product Image URL" name="productImage"
               [(ngModel)]="productForm.productImage" required />
           </div>
@@ -130,7 +127,6 @@
               <option value="Electronics">Electronics</option>
               <option value="Fashion Wear">Fashion Wear</option>
               <option value="Grocery">Grocery</option>
-
             </select>
           </div>
           <div class="form-group">
@@ -138,23 +134,13 @@
             <input type="number" id="productPrice" placeholder="Product Price" name="productPrice"
               [(ngModel)]="productForm.productPrice" required />
           </div>
-        </div>
-
-        <!-- Itineraries -->
-        <p style="font-size: medium; font-weight: bold">Itineraries</p>
-        <div class="tourInfo">
           <div class="form-group">
             <label for="Quantity">Quantity:</label>
             <input type="number" id="Slots" placeholder="Quantity available" name="Quantity" [(ngModel)]="productForm.Quantity"
               required />
           </div>
-        </div>
-
-        <!-- more info -->
-        <p style="font-size: medium; font-weight: bold">More Info</p>
-        <div class="tourInfo">
           <div class="form-group">
-            <label for="tourContact">Supplier Contact:</label>
+            <label for="productContact">Supplier Contact:</label>
             <input type="text" id="supplierContact" placeholder="Supplier Contact" name="supplierContact"
               [(ngModel)]="productForm.supplierContact" required />
           </div>
@@ -163,8 +149,8 @@
             <textarea id="productDescription" placeholder="Product Description" name="productDescription"
               [(ngModel)]="productForm.productDescription" required></textarea>
           </div>
-
         </div>
+
         <p style="margin: 10px; color: blue">{{ successAssign }}</p>
         <p style="margin: 10px; color: blue">{{ updateResponse }}</p>
         <p [style.color]="isWhichError ? 'blue' : 'red'">{{ errorResponse }}</p>
@@ -174,62 +160,53 @@
     </div>
   </div>
 
+
   <!-- update form -->
-  <div *ngIf="showUpdateForm" class="tour-form-container tour-form-transition">
-    <div class="tour-form tour-form-transition">
-      <form id="tour-form" (ngSubmit)="updateProductForm()">
+  <div *ngIf="showUpdateForm" class="product-form-container product-form-transition">
+    <div class="product-form product-form-transition">
+      <form id="product-form" (ngSubmit)="updateProductForm()">
         <p style="margin: 10px; color: red">{{ updateResponse }}</p>
         <p style="margin: 10px; color: blue;font-size: 40px;">{{ successResponse }}</p>
-        <!-- Tour Info -->
-        <p style="font-size: medium; font-weight: bold">Tour Highlights</p>
-        <div class="tourInfo">
+        <!-- product Info -->
+        <p style="font-size: medium; font-weight: bold">product Highlights</p>
+        <div class="productInfo">
           <div class="form-group">
-            <label for="tourName">Tour Name:</label>
-            <input type="text" id="tourName" placeholder="Tour Name" name="tourName" [(ngModel)]="productForm.productName"
+            <label for="productName">product Name:</label>
+            <input type="text" id="productName" placeholder="product Name" name="productName" [(ngModel)]="productForm.productName"
               required />
           </div>
           <div class="form-group">
-            <label for="tourImage">Tour Image</label>
-            <input type="text" id="tourImage" placeholder="Tour Image URL" name="tourImage"
+            <label for="productImage">product Image</label>
+            <input type="text" id="productImage" placeholder="product Image URL" name="productImage"
               [(ngModel)]="productForm.productImage" required>
           </div>
           <div class="form-group">
-            <label for="tourCategory">Tour Category:</label>
-            <select id="tourCategory" name="tourCategory" [(ngModel)]="productForm.productCategory" required>
-              <option value="" disabled>Tour category</option>
-              <option value="Cultural">Cultural</option>
-              <option value="Weekend Gateaway">Weekend Gateaway</option>
-              <option value="Hikes">Hikes</option>
-              <option value="International">International</option>
+            <label for="productCategory">product Category:</label>
+            <select id="productCategory" name="productCategory" [(ngModel)]="productForm.productCategory" required>
+              <option value="" disabled>Product category</option>
+              <option value="Jewellery">Jewellery</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Fashion Wear">Fashion Wear</option>
+              <option value="Grocery">Grocery</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="tourPrice">Product Price:</label>
-            <input type="number" id="tourPrice" placeholder="Tour Price" name="tourPrice"
+            <label for="productPrice">Product Price:</label>
+            <input type="number" id="productPrice" placeholder="Product Price" name="productPrice"
               [(ngModel)]="productForm.productPrice" required />
           </div>
-        </div>
-
-        <!-- Itineraries -->
-        <p style="font-size: medium; font-weight: bold">Itineraries</p>
-        <div class="tourInfo">
           <div class="form-group">
             <label for="Slots">Quantity:</label>
             <input type="number" id="Slots" placeholder="Slots" name="Slots" [(ngModel)]="productForm.Quantity" required />
           </div>
-        </div>
-
-        <!-- more info -->
-        <p style="font-size: medium; font-weight: bold">More Info</p>
-        <div class="tourInfo">
           <div class="form-group">
-            <label for="tourContact">Tour Contact:</label>
+            <label for="productContact">product Contact:</label>
             <input type="text" id="supplierContact" placeholder="Supplier Contact" name="supplierContact"
               [(ngModel)]="productForm.supplierContact" required />
           </div>
           <div class="form-group">
-            <label for="tourDescription">Tour Description:</label>
-            <textarea id="tourDescription" placeholder="Tour Description" name="tourDescription"
+            <label for="productDescription">product Description:</label>
+            <textarea id="productDescription" placeholder="product Description" name="productDescription"
               [(ngModel)]="productForm.productDescription" required></textarea>
           </div>
         </div>

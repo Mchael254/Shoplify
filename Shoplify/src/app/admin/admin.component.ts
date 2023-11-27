@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { SinglepageService } from '../services/singlepage.service';
+import { AdminService } from '../services/admin.service';
 
 @Component({
   selector: 'app-admin',
@@ -9,7 +10,7 @@ import { SinglepageService } from '../services/singlepage.service';
   styleUrls: ['./admin.component.css']
 })
 export class AdminComponent {
-  constructor(private http: HttpClient, private supervisorService: SinglepageService,
+  constructor(private http: HttpClient, private adminService: AdminService,
     private userService: UserService, private exploreService: SinglepageService) { }
   //projects
   products: any[] = [];
@@ -56,7 +57,6 @@ export class AdminComponent {
   isCompleted: boolean = false
   isCompletedr: boolean = true
   isWhichError: boolean = false
-  filteredEmployeee!: string
   successResponse: string = ''
   successAssign: string = ''
   noneCompleted: boolean = false
@@ -77,112 +77,41 @@ export class AdminComponent {
     this.profileview = false
   }
 
-  // fetchproducts() {
-  //   this.supervisorService.fetchproducts().subscribe((products: any) => {
+  productCount: number = 0
+  outOfStockCount: number = 0;
+  inStockCount: number = 0;
 
-  //     const productIDs = products.map((product: any) => product.productID);
+  fetchProducts() {
+    this.adminService.fetchProducts().subscribe((products: any) => {
+      this.products = products;
 
-  //     this.exploreService.allTickets().subscribe((tickets: any) => {
-  //       const ticketsByproduct = tickets.reduce((acc: any, ticket: any) => {
-  //         const productID = ticket.productID;
-  //         if (!acc[productID]) {
-  //           acc[productID] = [];
-  //         }
-  //         acc[productID].push(ticket);
-  //         return acc;
-  //       }, {});
+      this.updateCounts();
 
+      this.filteredProducts = [...this.products];
 
-  //       products.forEach((product: any) => {
-  //         const productID = product.productID;
-  //         const ticketsForproduct = ticketsByproduct[productID] || [];
-  //         const numberOfTickets = ticketsForproduct.length;
-  //         product.numberOfTickets = numberOfTickets;
-  //       });
+      this.filterProducts();
 
-  //       this.products = products;
-  //       this.filteredproducts = [...this.products];
+      console.log(products);
+    });
+  }
 
-  //       this.completedproductsCount = 0;
-
-
-  //       this.ongoingproductsCount = 0;
-  //       this.allproductsCount = 0;
-
-  //       this.filterproducts();
-
-  //       this.products.forEach((product: any) => {
-  //         this.checkproductCompletion(product);
-  //       });
-
-  //       this.products.forEach((product: any) => {
-  //         this.checkproductStatus(product);
-  //       });
-  //       this.allproductsCount = this.products.length;
-  //     });
-  //   });
-  // }
-
-
-  //filtter products
   filterProducts() {
     this.filteredProducts = this.products.filter((product) =>
-    product.productName.toLowerCase().includes(this.searchTearm.toLowerCase()));
-
-    this.completedproductsCount = this.filteredProducts.filter((product) => product.productStatus == 'completed').length;
-    this.ongoingproductsCount = this.filteredProducts.filter((product) => product.productStatus == 'ongoing').length;
-    this.upcomingproductsCount = this.filteredProducts.filter((product) => product.productStatus == 'upcoming').length;
-    this.allproductsCount = this.filteredProducts.length;
+      product.productName.toLowerCase().includes(this.searchTearm.toLowerCase()));
   }
 
-
-  checkproductCompletion(product: any) {
-    const currentDate = new Date();
-    const endDate = new Date(product.endDate);
-
-    if (currentDate > endDate) {
-
-      product.productStatus = 'completed';
-      this.completedproductsCount++;
-      this.isCompleted = true;
-    }
+  updateCounts() {
+    this.productCount = this.products.length;
+    this.outOfStockCount = this.products.filter(product => product.Quantity <= 5).length;
+    this.inStockCount = this.products.filter(product => product.Quantity > 5).length;
   }
 
-
-  checkproductStatus(product: any) {
-    const currentDate = new Date();
-    const startDate = new Date(product.startDate);
-    const endDate = new Date(product.endDate);
-
-    if (currentDate >= startDate && currentDate <= endDate) {
-      product.productStatus = 'ongoing';
-      this.ongoingproductsCount++;
-    } else if (currentDate > endDate) {
-      product.productStatus = 'completed';
-      this.completedproductsCount++;
-    } else if (currentDate < startDate) {
-
-      product.productStatus = 'upcoming';
-      this.upcomingproductsCount++;
-    }
-  }
-
-  //view completed products
-  viewOutofstockProducts() {
-    this.filteredProducts = this.products.filter((product) => product.productStatus == 'completed');
-  }
-
-
-  //view ongoing products
-  viewStockedProducts() {
-    this.filteredProducts = this.products.filter((product) => product.productStatus == 'ongoing');
-
-  }
 
   //show add product form
   addProduct() {
     this.showProductForm = true;
     this.updateResponse = ''
+    this.successAssign = ''
   }
   //close product form
   closeProduct() {
@@ -198,9 +127,9 @@ export class AdminComponent {
       productDescription: product.productDescription,
       productPrice: product.productPrice,
       productCategory: product.productCategory,
-      supplierContact: product.productContact,
+      supplierContact: product.supplierContact,
       productImage: product.productImage,
-      Quantity: product.Slots,
+      Quantity: product.Quantity,
     };
     this.successResponse = ''
     this.updateResponse = ''
@@ -215,42 +144,43 @@ export class AdminComponent {
       productDescription: this.productForm.productDescription,
       productPrice: this.productForm.productPrice,
       productCategory: this.productForm.productCategory,
+      supplierContact: this.productForm.supplierContact,
       productImage: this.productForm.productImage,
       Quantity: this.productForm.Quantity,
     };
     console.log(productDataUpdate);
-    // this.supervisorService.updateproduct(productDataUpdate).subscribe(
-    //   (response: any) => {
-    //     this.successResponse = 'product updated successfully'
-    //     this.fetchproducts();
-    //     setTimeout(() => {
-    //       this.showUpdateForm = false;
+    this.adminService.updateProduct(productDataUpdate).subscribe(
+      (response: any) => {
+        this.successResponse = 'product updated successfully'
+        this.fetchProducts();
+        setTimeout(() => {
+          this.showUpdateForm = false;
 
-    //     }, 3000);
-    //     this.fetchproducts()
-    //   },
-    //   (error) => {
-    //     if (error instanceof ErrorEvent) {
-    //       // Client-side error
-    //       this.updateResponse += ` Client-side error: ${error.message}`;
-    //       setTimeout(() => {
-    //         this.updateResponse = ''
-    //       }, 3000);
-    //     } else if (error instanceof HttpErrorResponse) {
-    //       // Server-side error
-    //       if (error.error && error.error.error) {
-    //         this.updateResponse += `   ${error.statusText} - ${error.error.error}`;
-    //         setTimeout(() => {
-    //           this.updateResponse = ''
-    //         }, 3000);
-    //       } else {
-    //         this.updateResponse += ` Server-side error: ${error.status} - ${error.statusText}`;
-    //       }
-    //     }
+        }, 3000);
+        this.fetchProducts()
+      },
+      (error) => {
+        if (error instanceof ErrorEvent) {
+          // Client-side error
+          this.updateResponse += ` Client-side error: ${error.message}`;
+          setTimeout(() => {
+            this.updateResponse = ''
+          }, 3000);
+        } else if (error instanceof HttpErrorResponse) {
+          // Server-side error
+          if (error.error && error.error.error) {
+            this.updateResponse += `   ${error.statusText} - ${error.error.error}`;
+            setTimeout(() => {
+              this.updateResponse = ''
+            }, 3000);
+          } else {
+            this.updateResponse += ` Server-side error: ${error.status} - ${error.statusText}`;
+          }
+        }
 
-    //     console.error('Error updating project:', error);
-    //   }
-    // );
+        console.error('Error updating project:', error);
+      }
+    );
   }
 
   //close the update product form
@@ -258,108 +188,89 @@ export class AdminComponent {
     this.showUpdateForm = false
   }
 
-  //create product
-  // submitproductForm() {
-  //   this.fetchproducts()
-  //   const productData = {
-  //     productName: this.productForm.productName,
-  //     productDescription: this.productForm.productDescription,
-  //     productHighlights: this.productForm.productHighlights,
-  //     productPrice: this.productForm.productPrice,
-  //     productHost: this.productForm.productHost,
-  //     productLocation: this.productForm.productLocation,
-  //     productDuration: this.productForm.productDuration,
-  //     productCategory: this.productForm.productCategory,
-  //     productImage: this.productForm.productImage,
-  //     productContact: this.productForm.productContact,
-  //     pickupLocation: this.productForm.pickupLocation,
-  //     pickupTime: this.productForm.pickupTime,
-  //     dropoffLocation: this.productForm.dropoffLocation,
-  //     dropoffTime: this.productForm.dropoffTime,
-  //     endDate: this.productForm.productEndDate,
-  //     startDate: this.productForm.productStartDate,
-  //     Slots: this.productForm.Slots,
+  // create product
+  submitProductForm() {
+    this.fetchProducts()
+    const productData = {
+      productName: this.productForm.productName,
+      productDescription: this.productForm.productDescription,
+      productPrice: this.productForm.productPrice,
+      productCategory: this.productForm.productCategory,
+      productImage: this.productForm.productImage,
+      supplierContact: this.productForm.supplierContact,
+      Quantity: this.productForm.Quantity,
 
-  //   };
-  //   // console.log(productData);
+    };
+    // console.log(productData);
 
-  //   this.supervisorService.createproduct(productData).subscribe(
-  //     (response: any) => {
-  //       this.fetchproducts()
-  //       this.successAssign = 'product created successfully'
-  //       setTimeout(() => {
-  //         this.errorResponse = '';
-  //         this.showproductForm = false;
-  //       }, 2500);
-  //     },
-  //     (error) => {
-  //       this.errorResponse = this.supervisorService.errorResponses();
-  //       setTimeout(() => {
-  //         this.errorResponse = ''
+    this.adminService.createProduct(productData).subscribe(
+      (response: any) => {
+        // this.fetchproducts()
+        this.successAssign = 'product created successfully'
+        setTimeout(() => {
+          this.errorResponse = '';
+          this.showProductForm = false;
+        }, 2500);
+      },
+      (error) => {
+        this.errorResponse = this.adminService.errorResponses();
+        setTimeout(() => {
+          this.errorResponse = ''
 
-  //       }, 2500);
-  //       this.updateResponse = this.supervisorService.updateResponses();
+        }, 2500);
+        this.updateResponse = this.adminService.updateResponses();
 
-  //       console.error('Error updating project:', error);
-  //     }
-  //   );
-  // }
+        console.error('Error updating project:', error);
+      }
+    );
+  }
 
   // profiles: any;
   // clients: any[] = [];
   // filteredClients: any[] = [];
   // client: any;
 
-  // ngOnInit() {
-  //   this.fetchproducts();
-  //   this.userService.getAllReviews().subscribe(
-  //     (data: any) => {
-  //       // console.log(data);
-  //       let reviews = JSON.stringify(data)
-  //       localStorage.setItem('getReviews', reviews)
-  //     },
-  //     (error: any) => {
-  //       console.error('Error fetching reviews:', error);
-  //     }
-  //   );
+  ngOnInit() {
+    this.fetchProducts();
 
 
-  //   //get admin  details
-  //   const userEmail = localStorage.getItem('user_email');
-  //   console.log(userEmail);
-  //   if (userEmail) {
-  //     this.userService.getUserDetails(userEmail).subscribe(
-  //       (response) => {
-  //         this.profiles = response.details
-  //         // console.log(response);
-  //         if (this.profiles && this.profiles.length > 0) {
-  //           const userDetail = this.profiles[0];
-  //           this.userName = userDetail.userName;
-  //           this.email = userDetail.email;
-  //           this.phone_no = userDetail.phone_no;
-  //           // this.password = userDetail.password;
-  //         }
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching user details:', error);
-  //       }
-  //     );
 
-  //   }
+    //   //get admin  details
+    //   const userEmail = localStorage.getItem('user_email');
+    //   console.log(userEmail);
+    //   if (userEmail) {
+    //     this.userService.getUserDetails(userEmail).subscribe(
+    //       (response) => {
+    //         this.profiles = response.details
+    //         // console.log(response);
+    //         if (this.profiles && this.profiles.length > 0) {
+    //           const userDetail = this.profiles[0];
+    //           this.userName = userDetail.userName;
+    //           this.email = userDetail.email;
+    //           this.phone_no = userDetail.phone_no;
+    //           // this.password = userDetail.password;
+    //         }
+    //       },
+    //       (error) => {
+    //         console.error('Error fetching user details:', error);
+    //       }
+    //     );
 
-  //   //get all users
-  //   this.userService.getAllUsers().subscribe(
-  //     (data: any) => {
+    //   }
 
-  //       this.clients = data.users;
-  //       this.filteredClients = this.clients.filter(client => client.role !== 'admin');
-  //     },
-  //     (error: any) => {
-  //       console.error('Error fetching reviews:', error);
-  //     }
-  //   );
+    //   //get all users
+    //   this.userService.getAllUsers().subscribe(
+    //     (data: any) => {
 
-  // }
+    //       this.clients = data.users;
+    //       this.filteredClients = this.clients.filter(client => client.role !== 'admin');
+    //     },
+    //     (error: any) => {
+    //       console.error('Error fetching reviews:', error);
+    //     }
+    //   );
+
+  }
 
 
   //complete product
@@ -483,11 +394,11 @@ export class AdminComponent {
 
   //clients management
   //delete user
-deleteSuccesss: boolean = false
-deleteSuccess: string = ''
-deletedUser(){
+  deleteSuccesss: boolean = false
+  deleteSuccess: string = ''
+  deletedUser() {
 
-}
+  }
   // deletesUser(email: string): void {
   //   this.showAcceptanceForm = true
 
@@ -517,7 +428,7 @@ deletedUser(){
   //   );
   // }
 
-  Clients(){
+  Clients() {
     this.dashboard = true
     this.productDashboard = false
     this.profileview = false

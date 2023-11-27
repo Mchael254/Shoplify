@@ -12,7 +12,7 @@
   height: 83vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   gap: 15px;
 
@@ -46,7 +46,7 @@ h3{
   width: 58%;
   height: 7vh;
   border-radius: 5px;
-  padding: 10px;
+  padding: 8px;
   transition: all 0.3s ease-in-out;
   outline: none;
   border: solid 0px;
@@ -101,7 +101,7 @@ p{
 .side{
   width: 58%;
   border-radius: 5px;
-  padding: 20px;
+  padding: 8px;
   transition: all 0.3s ease-in-out;
   outline: none;
   border: solid 0px;
@@ -219,6 +219,9 @@ font-weight: bold;
 
 
 .cards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   border-radius: 8px;
   padding: 10px;
   min-width:300px;
@@ -235,7 +238,10 @@ font-weight: bold;
   transform: translateY(-3px);
   box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
 
+}
 
+.cards img{
+  width: 150px;
 }
 
 .card h3 {
