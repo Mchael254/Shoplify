@@ -3,7 +3,7 @@ import Joi from "joi";
 
 export const orderCreationValidationSchema = Joi.object({
   productId: Joi.string().required(),
-  quantity: Joi.number().integer().min(1).required(),
+  Quantity: Joi.number().integer().min(1).required(),
   address: Joi.string().required(),
 });
 

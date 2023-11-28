@@ -10,11 +10,11 @@ const orders: any[] = [];
 
 export const createOrder = (req: Request, res: Response) => {
   try {
-    const { productId, quantity, address } = req.body;
+    const { productID, quantity, address } = req.body;
 
     const order = {
       orderId: orders.length + 1,
-      productId,
+      productID,
       quantity,
       address,
       status: "Pending",
