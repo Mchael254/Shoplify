@@ -1,5 +1,7 @@
-CREATE PROCEDURE deleteProduct
-    @productID VARCHAR(50)
+
+--use Shopie
+CREATE or alter PROCEDURE deleteProduct
+    @productID VARCHAR(350)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -7,7 +9,7 @@ BEGIN
     DECLARE @deleteResult INT;
 
     -- Check if the product exists
-    IF NOT EXISTS (SELECT 1 FROM Products WHERE ProductID = @productID)
+    IF NOT EXISTS (SELECT 1 FROM Products WHERE productID = @productID)
     BEGIN
         -- Product does not exist
         SET @deleteResult = -1;
@@ -15,7 +17,7 @@ BEGIN
     ELSE
     BEGIN
         -- Delete the product
-        DELETE FROM Products WHERE ProductID = @productID;
+        DELETE FROM Products WHERE productID = @productID;
         SET @deleteResult = 1;
     END
 

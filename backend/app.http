@@ -3,5 +3,9 @@ DELETE http://localhost:5400/product/deleteproduct/
 Content-Type: :application/json
 
 {
-    "productID":""
+    "productID":"5dbe1189-71c0-4381-8e03-bf0d710427ff"
 }
+
+
+### get all products
+GET http://localhost:5400/product

@@ -132,12 +132,7 @@ export const deleteProduct = async (req: Request, res: Response) => {
   try {
     const { productID } = req.body;
 
-    // Validate if productID is provided
-    if (!productID) {
-      return res
-        .status(400)
-        .json({ error: "Product ID is required for deletion." });
-    }
+    
 
     const pool = await mssql.connect(sqlConfig);
     const productDetails = await pool

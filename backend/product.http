@@ -38,7 +38,8 @@ Content-Type: application/json
 DELETE  http://localhost:5400/product/deleteproduct
 Content-Type: application/json
 
-{   
-    "productID":"f24c6080-15b6-43c4-b860-bc9295ce488f"
+{  
+
+    "productID":"5cc3bcd0-63ae-4bea-b82f-b865b0ff8436"
   
 }

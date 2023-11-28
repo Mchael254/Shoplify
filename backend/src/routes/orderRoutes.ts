@@ -1,15 +1,16 @@
-import express from "express";
-import orderRoutes from "../controllers/orderController";
+import Router from "express";
+import {
+  createOrder,
+  getAllOrders,
+  updateOrder,
+  // deleteOrder,
+} from "../controllers/orderController";
 
-const app = express();
+const order_router = Router();
 
+order_router.post("/createproduct", createOrder);
+order_router.get("/", getAllOrders);
+order_router.put("/updateProduct", updateOrder);
+// order_router.delete("/deleteorder", deleteOrder);
 
-
-// Include the order routes
-app.use("/orders", orderRoutes);
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+export default order_router;
