@@ -5,12 +5,9 @@ POST http://localhost:5400/order/createOrder
 Content-Type: application/json
 
 {
-    "productName": "Harry Porter",
-    "productDescription": "Explore breathtaking landscapes and exciting activities.",
-    "productPrice": 5000,
-    "productCategory": "Electronics",
-    "productImage": "https://m.media-amazon.com/images/I/61k7JqSWOUL._SY425_.jpg",
-    "supplierContact": "Penguin",
+    "productID": "5cc3bcd0-63ae-4bea-b82f-b865b0ff8436",
+    "address": "skuta.",
+    
     "Quantity": 20
 }
 
@@ -24,10 +21,10 @@ PUT  http://localhost:5400/product/updateOrder
 Content-Type: application/json
 
 {   
-    "productID":"5cc3bcd0-63ae-4bea-b82f-b865b0ff8436",
-    "productName": "Hunger Games",
-      "supplierContact": "Penguins",
-    "Quantity": 19
+    "orderId": "5cc3bcd0-63ae-4bea-b82f-b865b0ff8436",
+    "status": "pending",
+    
+    
 }
 
 ###delete product
