@@ -1,0 +1,44 @@
+
+
+### Create Product
+POST http://localhost:5400/product/createProduct
+Content-Type: application/json
+
+{
+    "productName": "Harry Porter",
+    "productDescription": "Explore breathtaking landscapes and exciting activities.",
+    "productPrice": 5000,
+    "productCategory": "Electronics",
+    "productImage": "https://m.media-amazon.com/images/I/61k7JqSWOUL._SY425_.jpg",
+    "supplierContact": "Penguin",
+    "Quantity": 20
+}
+
+### Get All Products
+GET http://localhost:5400/product/
+
+
+### update product
+
+PUT  http://localhost:5400/product/updateProduct
+Content-Type: application/json
+
+{   
+    "productID":"b549936c-d5b5-43fd-90a3-89bd692cdac0",
+    "productName": "Fourteen Falls",
+    "productDescription": "adventures",
+    "productPrice": 6000,
+    "productCategory": "Electronics",
+    "productImage": "https://m.media-amazon.com/images/I/61k7JqSWOUL._SY425_.jpg",
+    "supplierContact": "Penguins",
+    "Quantity": 19
+}
+
+###delete product
+DELETE  http://localhost:5400/product/deleteproduct
+Content-Type: application/json
+
+{   
+    "productID":"f24c6080-15b6-43c4-b860-bc9295ce488f"
+  
+}

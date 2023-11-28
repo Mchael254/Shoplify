@@ -1,35 +1,31 @@
-<app-navigation ></app-navigation>
+<app-navigation></app-navigation>
 <div class="nav">
   <div class="home">
-    <ul>
-      <li class="music">Shoplify</li>
-      <li class="accountDropdown">
-        <div class="filter">
-          <select id="category">
-            <option value="">Categories</option>
-            <option value="jewelery">Jewelry</option>
-            <option value="electronics">Electronics</option>
-            <option value="women's clothing">Fashion wear</option>
-            <option value="men's clothing">Grocery</option>
-          </select>
-        </div>
 
-      </li>
+    <div class="music">
+      <h3>Shoplify</h3>
+    </div>
+    <div class="accountDropdown">
+      <div class="filter">
+        <select id="category">
+          <option value="">Categories</option>
+          <option value="jewelery">Jewelry</option>
+          <option value="electronics">Electronics</option>
+          <option value="women's clothing">Fashion wear</option>
+          <option value="men's clothing">Grocery</option>
+        </select>
+      </div>
 
-      <li>
-        <div class="search-container">
-          <input type="text" placeholder="Search Products, Brand and Categories" id="searchInput">
-          <i class="fas fa-coffee"></i>
-        </div>
-      </li>
-      <li><button class="search">SEARCH</button></li>
+    </div>
 
-    </ul>
+    <div class="search-container" style="border: solid 1px #d9d9d9;border-radius: 5px;">
+      <input type="text" placeholder="Search Product" value="search"
+        style="border: solid 1px #af3232; height: 30px; width: 600px; text-align: center; font-size: large; border: 0px solid;"
+        [(ngModel)]="searchTearm" (input)="filterProducts()" /><span class="material-symbols-outlined">
+        search
+      </span>
 
-
-
-
-
+    </div>
 
   </div>
   <div class="account">
@@ -45,14 +41,38 @@
         </div>
       </li>
       <div class="cart">
-        <li>Cart</li>
-        <li><a routerLink="/checkout"><i class="fa" style="font-size:24px">&#xf07a;</i>
-            <span class='badge badge-warning' id='cart-count'></span></a>
-        </li>
-
+        <a routerLink="/checkout" class="carts">
+          <li>
+            <span class="material-symbols-outlined">
+              shopping_cart
+              <sup class="counter">{{ cartItemCount }}</sup>
+            </span>
+          </li>
+          <li>Cart</li>
+        </a>
       </div>
 
     </ul>
 
   </div>
 </div>
+
+<div class="products">
+  <div *ngIf="filteredProducts | search: searchTearm" class="card-container">
+    <div *ngFor="let product of filteredProducts" class="cards" (click)="productClick(product)">
+      <h3>{{ product.productName }}</h3>
+      <img src="{{product.productImage}}">
+      <p style="font-weight: bold;">{{ product.Quantity}}</p>
+      <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+
+<app-footer></app-footer>
