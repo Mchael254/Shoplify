@@ -1,6 +1,6 @@
-*****user procedures ****
 
-register 
+
+ 
 
 -- use Shopie
 
@@ -24,11 +24,11 @@ BEGIN
     END
 END
 
-select * from Users
+-- select * from Users
 
-------------
 
-login
+
+
 -- use Shopie
 -- select * from Users
 create  PROCEDURE loginUser(

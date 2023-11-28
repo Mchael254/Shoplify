@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken'
 import { v4 } from "uuid";
 import { sqlConfig } from "../config/sqlConfig";
 import {  userLoginValidationSchema, userRegisterValidationSchema } from "../validators/userValidators";
+import { ExtendedUser } from "../middleware/tokenVerify";
 
 
 //register user
@@ -23,23 +24,23 @@ export const registerUser = async (req: Request, res: Response) => {
 
         const pool = await mssql.connect(sqlConfig);
 
-        const checkEmailQuery = SELECT 1 FROM Users WHERE email = @email;
-        const emailCheckResult = await pool.request()
-            .input("email", mssql.VarChar, email)
-            .query(checkEmailQuery);
+        // const checkEmailQuery = SELECT 1 FROM Users WHERE email = @email;
+        // const emailCheckResult = await pool.request()
+        //     .input("email", mssql.VarChar, email)
+        //     .query(checkEmailQuery);
 
-        const checkPhoneQuery = SELECT 1 FROM Users WHERE phone_no = @phone_no;
-        const phoneCheckResult = await pool.request()
-            .input("phone_no", mssql.VarChar, phone_no)
-            .query(checkPhoneQuery);
+        // const checkPhoneQuery = SELECT 1 FROM Users WHERE phone_no = @phone_no;
+        // const phoneCheckResult = await pool.request()
+        //     .input("phone_no", mssql.VarChar, phone_no)
+        //     .query(checkPhoneQuery);
 
-        if (emailCheckResult.recordset.length > 0 && phoneCheckResult.recordset.length > 0) {
-            return res.status(400).json({ error: 'Email and phone number already exist.' });
-        } else if (emailCheckResult.recordset.length > 0) {
-            return res.status(400).json({ error: 'Email already exists' });
-        } else if (phoneCheckResult.recordset.length > 0) {
-            return res.status(400).json({ error: 'Phone number already exists.' });
-        }
+        // if (emailCheckResult.recordset.length > 0 && phoneCheckResult.recordset.length > 0) {
+        //     return res.status(400).json({ error: 'Email and phone number already exist.' });
+        // } else if (emailCheckResult.recordset.length > 0) {
+        //     return res.status(400).json({ error: 'Email already exists' });
+        // } else if (phoneCheckResult.recordset.length > 0) {
+        //     return res.status(400).json({ error: 'Phone number already exists.' });
+        // }
 
         const data = await pool.request()
             .input("userID", mssql.VarChar, userID)
@@ -115,4 +116,14 @@ export const loginUser = async (req: Request, res: Response) => {
         });
     }
 
+}
+
+
+//checkUser Details
+export const checkUserDetails = async (req: ExtendedUser, res: Response) => {
+    if (req.info) {
+        return res.json({
+            info: req.info
+        })
+    }
 }

@@ -1,0 +1,7 @@
+### delete product
+DELETE http://localhost:5400/product/deleteproduct/
+Content-Type: :application/json
+
+{
+    "productID":""
+}

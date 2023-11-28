@@ -76,7 +76,7 @@ export const getAllproducts = async (req: Request, res: Response) => {
 };
 
 //update product
-export const updateproduct = async (req: Request, res: Response) => {
+export const updateProduct = async (req: Request, res: Response) => {
   try {
     let {
       productID,
@@ -122,6 +122,42 @@ export const updateproduct = async (req: Request, res: Response) => {
   } catch (error) {
     return res.status(500).json({
       message: error,
+    });
+  }
+};
+
+
+//delete product
+export const deleteProduct = async (req: Request, res: Response) => {
+  try {
+    const { productID } = req.body;
+
+    // Validate if productID is provided
+    if (!productID) {
+      return res
+        .status(400)
+        .json({ error: "Product ID is required for deletion." });
+    }
+
+    const pool = await mssql.connect(sqlConfig);
+    const productDetails = await pool
+      .request()
+      .input("productID", mssql.VarChar, productID)
+      .execute("deleteProduct");
+
+    const deletionResult = productDetails.recordset[0].deleteResult;
+
+    if (deletionResult === -1) {
+      return res.status(400).json({ error: "Product does not exist." });
+    } else {
+      return res.status(200).json({
+        message: "Product deleted successfully",
+        deletedProductID: productID,
+      });
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: error || "Internal server error",
     });
   }
 };
