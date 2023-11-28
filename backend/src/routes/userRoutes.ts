@@ -1,25 +1,8 @@
-<<<<<<< HEAD
-import Router from "express";
-import {
-  checkUserDetails,
-  loginUser,
-  registerUser,
-} from "../controllers/userControllers";
-import { verifyToken } from "../middleware/tokenVerify";
 
-const user_router = Router();
-
-// user_router.get('/',verifyToken,getAllUsers)
-user_router.post("/register", registerUser);
-user_router.post("/login", loginUser);
-user_router.get("/check_user_details", verifyToken, checkUserDetails);
-
-
-export default user_router;
-=======
 import Router from 'express'
-import { checkUserDetails, loginUser, registerUser } from '../controllers/userControllers'
+
 import { verifyToken } from '../middleware/tokenVerify'
+import { checkUserDetails, loginUser, registerUser } from '../controllers/userControllers'
 
 
 
@@ -41,4 +24,4 @@ user_router.get('/check_user_details', verifyToken, checkUserDetails)
 // user_router.delete('/deleteUser', deleteUser)
 
 export default user_router
->>>>>>> fa2e0f8fa302592d0ae834416a4405abcd659d0f
+

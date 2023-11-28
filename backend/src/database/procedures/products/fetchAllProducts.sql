@@ -6,5 +6,7 @@ create procedure fetchAllProducts
 as
 begin
 
-select * from Tours
+select * from Products
 end
+
+drop Procedure fetchAllProducts

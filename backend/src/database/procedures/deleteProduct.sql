@@ -23,4 +23,4 @@ BEGIN
     SELECT @deleteResult AS deleteResult;
 END
 
-use Shopie
+-- use Shopie

@@ -24,8 +24,8 @@ PUT  http://localhost:5400/product/updateProduct
 Content-Type: application/json
 
 {   
-    "productID":"b549936c-d5b5-43fd-90a3-89bd692cdac0",
-    "productName": "Fourteen Falls",
+    "productID":"5cc3bcd0-63ae-4bea-b82f-b865b0ff8436",
+    "productName": "Hunger Games",
     "productDescription": "adventures",
     "productPrice": 6000,
     "productCategory": "Electronics",
