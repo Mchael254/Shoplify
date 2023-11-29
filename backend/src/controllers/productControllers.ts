@@ -45,10 +45,11 @@ export const createProduct = async (req: Request, res: Response) => {
       .input("Quantity", mssql.Numeric, Quantity)
       .execute("createProduct");
 
-    return res.status(200).json({
-      message: "product created successfully",
-      productID,
+      console.log(productDetails);
+res.status(200).json({
+      message: "product created successfully"
     });
+    return 
   } catch (error) {
     return res.status(500).json({
       message: error,

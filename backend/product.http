@@ -5,12 +5,12 @@ POST http://localhost:5400/product/createProduct
 Content-Type: application/json
 
 {
-    "productName": "Harry Porter",
+    "productName": "Harry Porter5",
     "productDescription": "Explore breathtaking landscapes and exciting activities.",
     "productPrice": 5000,
     "productCategory": "Electronics",
     "productImage": "https://m.media-amazon.com/images/I/61k7JqSWOUL._SY425_.jpg",
-    "supplierContact": "Penguin",
+    "supplierContact": "Penguin2",
     "Quantity": 20
 }
 
