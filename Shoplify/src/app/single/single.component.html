@@ -50,7 +50,10 @@
         <div class="category">
           <p> <strong>Name:</strong> {{ selectedProduct.productName }}</p>
           <p><strong>Price:</strong> Ksh {{ selectedProduct.productPrice }}</p>
-          <p><strong>Qunatity:</strong>{{ selectedProduct.Quantity }}</p>
+          <!-- your-component.component.html -->
+          <p><strong>Quantity:</strong>{{ (selectedProduct.Quantity - cartItemCount) > 0 ? (selectedProduct.Quantity - cartItemCount) : 0 }}</p>
+
+          <!-- <p><strong>Qunatity:</strong>{{ selectedProduct.Quantity }}</p> -->
           <button *ngIf="cartVanish" (click)="orderProduct()">Add to Cart</button>
         </div>
       </div>
