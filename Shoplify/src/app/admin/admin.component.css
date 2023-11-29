@@ -671,9 +671,24 @@ color:#fff;
 
 }
 .deletes:hover{
+
+}
+
+.softDelete{
+  background-color:#f8982d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin:50px 40px;
+}
+
+.softDelete:hover {
+  background-color:black;
   transform: scale(1.05);
-  color:white;
-  background-color: #b92121;
 
 }
 
