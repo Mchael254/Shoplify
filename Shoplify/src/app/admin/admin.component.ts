@@ -91,7 +91,7 @@ export class AdminComponent {
 
       this.filterProducts();
 
-      console.log(products);
+      // console.log(products);
     });
   }
 
@@ -123,6 +123,7 @@ export class AdminComponent {
   productDetails(product: any) {
     this.productctID = product.productID;
     this.productForm = {
+      
       productName: product.productName,
       productDescription: product.productDescription,
       productPrice: product.productPrice,
@@ -130,6 +131,7 @@ export class AdminComponent {
       supplierContact: product.supplierContact,
       productImage: product.productImage,
       Quantity: product.Quantity,
+
     };
     this.successResponse = ''
     this.updateResponse = ''
@@ -148,7 +150,7 @@ export class AdminComponent {
       productImage: this.productForm.productImage,
       Quantity: this.productForm.Quantity,
     };
-    console.log(productDataUpdate);
+    // console.log(productDataUpdate);
     this.adminService.updateProduct(productDataUpdate).subscribe(
       (response: any) => {
         this.successResponse = 'product updated successfully'
@@ -205,7 +207,7 @@ export class AdminComponent {
 
     this.adminService.createProduct(productData).subscribe(
       (response: any) => {
-        // this.fetchproducts()
+        this.fetchProducts()
         this.successAssign = 'product created successfully'
         setTimeout(() => {
           this.errorResponse = '';
@@ -225,10 +227,28 @@ export class AdminComponent {
     );
   }
 
-  // profiles: any;
-  // clients: any[] = [];
-  // filteredClients: any[] = [];
-  // client: any;
+  deleteProduct() {
+    const softDelete= {
+      productID: this.productctID,
+    };
+    // console.log(softDelete);
+    const productID = this.productctID; 
+    this.adminService.deleteProduct(productID).subscribe(
+      (response) => {
+        console.log('User deleted successfully', response);
+        this.deleteSuccesss = true
+        this.deleteSuccess = 'product deleted successfully'
+        this.showAcceptanceForm = false
+
+      },
+      (error) => {
+        console.error('Error deleting user', error);
+      }
+    );
+
+  }
+
+
 
   ngOnInit() {
     this.fetchProducts();
@@ -277,35 +297,7 @@ export class AdminComponent {
   completeproduct() {
     this.showAcceptanceForm = true
   }
-  //delete product
-  // deleteproduct() {
-  //   this.showAcceptanceForm = true
-  //   this.showUpdateForm = false
-  //   setTimeout(() => {
-  //     this.supervisorService.deleteproduct(this.productctID).subscribe(
-  //       (data: any) => {
-  //         console.log(this.productID);
 
-  //         this.updateResponse = 'deleted successfully'
-  //         this.showAcceptanceForm = false
-  //         setTimeout(() => {
-  //           this.fetchproducts()
-  //         }, 2500);
-
-  //       },
-  //       (error) => {
-  //         console.error('Error updating project:', error);
-  //       }
-
-  //     );
-  //   }, 3000);
-  // }
-
-  //delete Authorization
-  // acceptDelete() {
-  //   this.deleteproduct()
-  //   this.showAcceptanceForm = false
-  // }
 
   closeAuth() {
     this.showAcceptanceForm = false

@@ -151,7 +151,6 @@
           </div>
         </div>
 
-        <p style="margin: 10px; color: blue">{{ successAssign }}</p>
         <p style="margin: 10px; color: blue">{{ updateResponse }}</p>
         <p [style.color]="isWhichError ? 'blue' : 'red'">{{ errorResponse }}</p>
         <button (click)="closeProduct()" class="close">Close</button>
@@ -209,15 +208,13 @@
             <textarea id="productDescription" placeholder="product Description" name="productDescription"
               [(ngModel)]="productForm.productDescription" required></textarea>
           </div>
+          <input type="hidden" id="productID" name="productID" [(ngModel)]="productID" />
         </div>
-
-        <p style="margin: 10px; color: red">{{ updateResponse }}</p>
-        <p style="margin: 10px; color: blue">{{ successResponse }}</p>
-
+        
         <button (click)="closeUpdate()" class="close">Close</button>
-        <button type="submit" class="formSubmit">Update Project</button>
-
-
+        <button type="submit" class="formSubmit">Update Product</button>
+        <button class="softDelete" (click)="deleteProduct()">Delete</button>
+      
       </form>
     </div>
   </div>

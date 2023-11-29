@@ -209,6 +209,7 @@
   margin: 0px 90px;
 }
 .empty{
+  position: absolute;
   height: 60vh;
   width: 80vw;
   display: flex;
@@ -325,8 +326,6 @@
 }
 
 
-
-
 .payment-option {
   display: flex;
   align-items: center;
@@ -401,7 +400,7 @@
 .mainContainer{
   width: 98vw;
   height: 86vh;
-  /* border: solid green 2px; */
+  border: solid green 2px;
   display: flex;
   justify-content: center;
   align-items: center;

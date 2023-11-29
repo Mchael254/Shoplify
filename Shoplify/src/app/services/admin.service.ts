@@ -64,4 +64,11 @@ export class AdminService {
     return this.http.put(updateProductUrl, productDataUpdate);
   }
 
+  //soft delete product
+    deleteProduct(productID: string): Observable<any> {
+      const url = `${this.apiUrl}/deleteProduct?productID=${productID}`;
+      return this.http.delete(url);
+    }
+  
+
 }

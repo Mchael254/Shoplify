@@ -32,9 +32,6 @@
 
 </div>
 
-
-
-
 <div class="mainContainer">
   <div *ngIf="container" class="container">
     <div class="productContainer">
@@ -64,7 +61,13 @@
     <div *ngIf="summary" class="summary">
       <h2 style="border-bottom: solid gray 1px;">Cart Summary </h2>
       <h3>{{totalAmount}}</h3>
-      <button>Checkout</button>
+      <button (click)="makeOrder()">Checkout</button>
+    </div>
+  </div>
+
+  <div *ngIf="orderMade" class="modal-overlay">
+    <div class="updateContainer">
+     <p>Order made successfully</p>
     </div>
   </div>
 
@@ -78,18 +81,5 @@
 
 </div>
 
-<div *ngIf="paymentOptions" class="payment-optionn" [ngClass]="{'active': paymentOptions}">
-  <h2 style="margin-bottom: 20px;">Select Payment Option</h2>
-  <div class="payment-option">
-    <input type="radio" name="payment" id="mpesaOption" value="mpesa">
-    <label for="mpesaOption">Pay via M-Pesa</label>
-  </div>
-  <div class="payment-option">
-    <input type="radio" name="payment" id="cashOption" value="cash">
-    <label for="cashOption">Cash on Delivery</label>
-  </div>
-  <button onclick="processPayment()" class="checkout-button">Proceed to Pay</button>
-  <button (click)="notYet()" class="checkout-button">Decline</button>
 
-</div>
 <!-- <app-footer></app-footer> -->
