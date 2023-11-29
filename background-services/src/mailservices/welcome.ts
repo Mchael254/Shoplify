@@ -2,7 +2,7 @@ import ejs from 'ejs'
 import mssql from 'mssql'
 import dotenv from 'dotenv'
 import { sqlConfig } from '../config/sqlConfig'
-import { sendMail } from '../helpers/emailHelpres'
+import { sendMail } from '../helpers/emailHelpers'
 dotenv.config()
 
 export const welcomeUser = async() =>{
