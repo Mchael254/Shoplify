@@ -62,7 +62,7 @@
     <div *ngFor="let product of filteredProducts" class="cards" (click)="productClick(product)">
       <h3>{{ product.productName }}</h3>
       <img src="{{product.productImage}}">
-      <p style="font-weight: bold;">{{ product.Quantity}}</p>
+      <!-- <p style="font-weight: bold;">{{ product.Quantity}}</p> -->
       <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
     </div>
 

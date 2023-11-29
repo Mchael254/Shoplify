@@ -16,6 +16,7 @@ import { SingleComponent } from './single/single.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchPipe } from './pipes/search.pipe';
+import { SinglepageService } from './services/singlepage.service';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,7 @@ import { SearchPipe } from './pipes/search.pipe';
     HttpClientModule,
     FormsModule,
   ],
-  providers: [],
+  providers: [SinglepageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

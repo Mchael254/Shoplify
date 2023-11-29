@@ -1,33 +1,84 @@
 <app-navigation></app-navigation>
+<div class="buy">
 
-<div *ngIf="deletes" class="navigation">
-  <div class="nav">
-    <li>
-      <h1>My Shopping Cart</h1>
-    </li>
-    <li class="delete-icon" title="Delete All">&#128465;</li>
+  <div class="account">
+    <div class="productss">
+      <h3>Shoplify </h3>
+    </div>
+
+    <div class="marquees">
+      <marquee>!!! HURRY, GREAT DISCOUNTS AVAILABLE</marquee>
+    </div>
+    <div class="accountDropdown">
+      <!-- <a href="">Help</a> -->
+      <div class="dropdown-content">
+        <a href="/views/signin.html">Product</a>
+        <a href="/views/signup.html">Account</a>
+      </div>
+    </div>
+    <div class="cart">
+      <a routerLink="/checkout" class="carts">
+        <li>
+          <span class="material-symbols-outlined">
+            shopping_cart
+            <sup class="counter">{{ cartItemCount }}</sup>
+          </span>
+        </li>
+        <li>Cart</li>
+      </a>
+    </div>
+
   </div>
+
 </div>
 
 
-<div id="modal" class="modal-container">
-  <div id="customDialog" class="custom-dialog">
-    <p>Are you sure you want to delete all items?</p>
-    <button id="confirmYes">Yes</button>
-    <button id="confirmNo">No</button>
-  </div>
-</div>
 
-<div class="main">
-  <div *ngIf="emptyCart"  class="empty">
+
+<div class="mainContainer">
+  <div *ngIf="container" class="container">
+    <div class="productContainer">
+      <div *ngFor="let item of existingCartItems" class="itemCard">
+        <div class="images">
+          <img src="{{ item.productImage }}" alt="">
+          <p>{{ item.productName }}</p>
+        </div>
+        <div class="details">
+          <p>{{ item.productPrice }}</p>
+          <button (click)="reduce(item)">-</button>
+          <span style="font-weight: bold;font-size: medium;">{{ item.quantity }}</span>
+          <span><button (click)="add(item)"> +</button></span>
+          <button (click)="remove(item)">remove<span class="material-symbols-outlined">delete </span></button>
+          <div class="orderContainer">
+            <div *ngIf="showAcceptanceForm" class="modal-overlay">
+              <div class="updateContainer">
+                <button (click)="continue(item)" class="yes">Remove form Cart</button>
+                <button (click)="decline()">Dont remove </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div *ngIf="summary" class="summary">
+      <h2 style="border-bottom: solid gray 1px;">Cart Summary </h2>
+      <h3>{{totalAmount}}</h3>
+      <button>Checkout</button>
+    </div>
+  </div>
+
+  <div *ngIf="emptyCart" class="empty">
     <div class="emptyMessage">
       <h1>Your Cart is Empty</h1>
+
     </div>
     <a routerLink="/landing">Start Shopping</a>
   </div>
+
 </div>
 
-<div *ngIf="paymentOptions" class="payment-optionn"  [ngClass]="{'active': paymentOptions}">
+<div *ngIf="paymentOptions" class="payment-optionn" [ngClass]="{'active': paymentOptions}">
   <h2 style="margin-bottom: 20px;">Select Payment Option</h2>
   <div class="payment-option">
     <input type="radio" name="payment" id="mpesaOption" value="mpesa">
