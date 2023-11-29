@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AdminService } from '../services/admin.service';
 import { Router } from '@angular/router';
+import { SinglepageService } from '../services/singlepage.service';
 
 @Component({
   selector: 'app-landing',
@@ -8,14 +9,13 @@ import { Router } from '@angular/router';
   styleUrls: ['./landing.component.css']
 })
 export class LandingComponent {
-  constructor(private adminService:AdminService,private router:Router) { }
+  constructor(private adminService:AdminService,private router:Router,private singleService:SinglepageService) { }
   products: any[] = [];
   filteredProducts: any[] = [];
   searchTearm: string = '';
 
   //cart
   cartItemCount: number = 0;
-
 
 
  productClick(product:any){
@@ -53,6 +53,11 @@ export class LandingComponent {
 
   ngOnInit(): void {
     this.fetchProducts();
+    const existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    this.cartItemCount = existingCartItems.reduce((count:number, item:any) => count + item.quantity, 0);
+
+    // const existingCartItems = this.singleService.getCartItems();
+    // this.cartItemCount = existingCartItems.reduce((count, item) => count + item.quantity, 0);
 
   }
 
