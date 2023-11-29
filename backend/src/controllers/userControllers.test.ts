@@ -1,7 +1,8 @@
 import mssql from "mssql";
 import bcrypt from "bcrypt";
-import { registerUser } from "./userControllers";
+import { loginUser, registerUser } from "./userControllers";
 import { Request } from "express";
+import jwt from "jsonwebtoken";
 
 describe("User Registration", () => {
   let res: any;
@@ -102,24 +103,119 @@ describe("User Login",()=>{
         };
       });
 
-    it("Logs user successfully",()=>{
-         req = {
-           body: {
-             email: "devngecu@gmail.com",
-             password: "I@mrich24",
-            
-           },
-         };
+          it("Returns an error if email or password is empty", async () => {
+            const req = {
+              body: {
+                email: "",
+                password: "",
+              },
+            };
 
-             jest
-               .spyOn(bcrypt, "hash")
-               .mockResolvedValueOnce("HashedPass@word123" as never);
+            await loginUser(req as Request, res);
 
+            expect(res.json).toHaveBeenCalledWith({
+              error: '"email" is not allowed to be empty',
+            });
+          });
+ it('Returns an error if email or password is missing' ,async()=>{
+        const req = {
+            body:{
+                
+            }
+        }
 
-              const mokedInput = jest.fn().mockReturnThis();
+        await loginUser(req as Request, res)
 
-              const mockedExecute = jest.fn().mockResolvedValue
+        expect(res.json).toHaveBeenCalledWith({"error": "\"password\" is required"})
 
-    }
-    )
+    })
+
+    it("Returns an error if email is not in database", async()=>{
+        const req = {
+            body:{
+                email: "incorrect@email.com",
+                password: "12345678"
+            } 
+        }
+
+        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValueOnce({recordset: []})
+        } as never)
+ 
+        await loginUser(req as Request, res)
+
+        expect(res.json).toHaveBeenCalledWith({error: "Email not found"}) 
+    })
+
+    it("Handles incorrect password scenario", async()=>{
+        const req = {
+            body:{
+                email: "correct@email.com",
+                password: "wrongPassword"
+            }
+        }
+
+        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValueOnce({
+                recordset: [{
+                    email: 'correct@email.com',
+                    password: 'hashedPwd'
+                }]
+            })
+        } as never)
+
+        jest.spyOn(bcrypt, 'compare').mockResolvedValueOnce(false as never)
+
+        await loginUser(req as Request, res)
+
+        expect(res.json).toHaveBeenCalledWith({error: "Incorrect password"})
+    })
+
+    it("successfully logs in a user and returns a token", async()=>{
+
+        let expectedUser = {
+          userID: "539c2d03-1605-43af-8553-f87c8045352f",
+          userName: "Eucs Angulars",
+          email: "da@gmail.com",
+          password:
+            "$2b$05$hNpxpVF/oG8yQvnwLSOYQOyXxy/AUdZqk7PFtwOIStyHPDSKAnpde",
+          phone_no: "0708139390",
+
+          role: "admin",
+          welcomed: 0,
+          isOrder: 0
+        };
+
+        const req = {
+            body:{
+                email: expectedUser.email,
+                password: "correctPassword"
+            }
+        }
+
+        jest.spyOn(mssql, 'connect').mockResolvedValueOnce({
+            request: jest.fn().mockReturnThis(),
+            input: jest.fn().mockReturnThis(),
+            execute: jest.fn().mockResolvedValueOnce({recordset: [expectedUser]})
+        } as never)
+
+        jest.spyOn(bcrypt, 'compare').mockResolvedValueOnce(true as never)
+
+        jest.spyOn(jwt, 'sign').mockReturnValueOnce("generate-token-jghjg-jyiugjxz-mmhjruyiu" as never)
+
+        await loginUser(req as Request, res)
+
+        expect(res.json).toHaveBeenCalledWith({
+            message: "Logged in successfully",
+            token: "generate-token-jghjg-jyiugjxz-mmhjruyiu"
+        })
+
+    })
+
 })
+
+

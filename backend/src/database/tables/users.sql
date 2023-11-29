@@ -14,6 +14,7 @@ use Shopie
 --     isOrder bit DEFAULT 0
 -- )
 
+use Shopie
 select * from Users
 
 update Users 
