@@ -21,8 +21,8 @@
     <!-- product cards -->
     <div class="buttonsss">
       <p class="top">All Products<br /><span style="color: #9E9E9E">{{ productCount }}</span></p>
-      <p class="top">Out of Stock <br /><span style="color: #4CAF50">{{ outOfStockCount }}</span></p>
-      <p class="top">In stock<br /><span style="color:#2196F3">{{ inStockCount }}</span></p>
+      <p class="top">Out of Stock <br /><span style="color: red">{{ outOfStockCount }}</span></p>
+      <p class="top">In stock<br /><span style="color:green">{{ inStockCount }}</span></p>
       <p class="top">
         <span>
           <input type="text" placeholder="Search Product"
@@ -64,9 +64,9 @@
   <div *ngIf="showProductForm" class="product-form-container product-form-transition">
     <div class="product-form product-form-transition">
       <form id="product-form" (ngSubmit)="submitProductForm()">
-        <p style="margin: 10px; color: blue;font-size: 20px;">{{ successAssign }}</p>
-        <p style="margin: 10px; color: blue">{{ updateResponse }}</p>
-        <p [style.color]="isWhichError ? 'blue' : 'red'">{{ errorResponse }}</p>
+        <p style="margin: 10px; color: black;font-size: 20px;">{{ successAssign }}</p>
+        <p style="margin: 10px; color: black">{{ updateResponse }}</p>
+        <p [style.color]="isWhichError ? 'black' : 'red'">{{ errorResponse }}</p>
 
         <!-- Product Info -->
         <p style="font-size: medium; font-weight: bold">Product Highlights</p>
@@ -113,8 +113,8 @@
           </div>
         </div>
 
-        <p style="margin: 10px; color: blue">{{ updateResponse }}</p>
-        <p [style.color]="isWhichError ? 'blue' : 'red'">{{ errorResponse }}</p>
+        <p style="margin: 10px; color: black">{{ updateResponse }}</p>
+        <p [style.color]="isWhichError ? 'black' : 'red'">{{ errorResponse }}</p>
         <button (click)="closeProduct()" class="close">Close</button>
         <button type="submit" class="formSubmit">Create Product</button>
       </form>
@@ -127,7 +127,7 @@
     <div class="product-form product-form-transition">
       <form id="product-form" (ngSubmit)="updateProductForm()">
         <p style="margin: 10px; color: red">{{ updateResponse }}</p>
-        <p style="margin: 10px; color: blue;font-size: 30px;">{{ successResponse }}</p>
+        <p style="margin: 10px; color: black;font-size: 30px;">{{ successResponse }}</p>
         <!-- product Info -->
         <p style="font-size: medium; font-weight: bold">product Highlights</p>
         <div class="productInfo">

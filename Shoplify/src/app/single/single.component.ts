@@ -49,7 +49,7 @@ export class SingleComponent {
           existingCartItem.quantity += 1;
         }else{
 
-         this. existingCartItems.push({ ...this.selectedProduct, quantity: 1 });
+         this. existingCartItems.push({ ...this.selectedProduct, quantity: 1 ,userEmail: userEmail});
         }
       }
 
@@ -68,6 +68,9 @@ export class SingleComponent {
   }
 
   ngOnInit() {
+    const userEmails = localStorage.getItem('user_email');
+    console.log(userEmails);
+    
     this.existingCartItems = this.singleService.getCartItems();
 
     const productDetails = localStorage.getItem('selectedProduct');
