@@ -7,15 +7,14 @@
     </div>
     <div class="accountDropdown">
       <div class="filter">
-        <select id="category">
-          <option value="">Categories</option>
-          <option value="jewelery">Jewelry</option>
-          <option value="electronics">Electronics</option>
-          <option value="women's clothing">Fashion wear</option>
+        <select id="category"  (change)="onCategoryChange($event)">
+          <option value="">All</option>
+          <option value="Jewellery">Jewellery</option>
+          <option value="Electronics">Electronics</option>
+          <option value="Fashion Wear">Fashion wear</option>
           <option value="men's clothing">Grocery</option>
         </select>
       </div>
-
     </div>
 
     <div class="search-container" style="border: solid 1px #d9d9d9;border-radius: 5px;">
@@ -57,18 +56,39 @@
   </div>
 </div>
 
+
 <div class="products">
-  <div *ngIf="filteredProducts | search: searchTearm" class="card-container">
-    <div *ngFor="let product of filteredProducts" class="cards" (click)="productClick(product)">
-      <h3>{{ product.productName }}</h3>
-      <img src="{{product.productImage}}">
-      <!-- <p style="font-weight: bold;">{{ product.Quantity}}</p> -->
-      <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
-    </div>
+  <div *ngIf="filteredProducts.length > 0" class="card-container">
+
+    <ng-container *ngFor="let category of getUniqueCategories()" class="category-container">
+      <div class="category">
+        <div class="manage">
+          <h2>{{ category }}</h2>
+          <div class="inner">
+            
+            <ng-container *ngFor="let product of filteredProducts">
+              <div class="cards" (click)="productClick(product)" *ngIf="product.productCategory === category">
+                <h3>{{ product.productName }}</h3>
+                <img [src]="product.productImage" alt="{{ product.productName }}">
+                <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
+              </div>
+            </ng-container>
+
+          </div>
+
+        </div>
+
+
+      </div>
+    </ng-container>
 
   </div>
-
 </div>
+
+
+
+
+
 
 
 <app-footer></app-footer>
