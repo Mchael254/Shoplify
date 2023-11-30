@@ -36,11 +36,7 @@ export class LandingComponent {
     this.adminService.fetchProducts().subscribe((products: any) => {
       this.products = products;
 
-      // this.updateCounts();
-
       this.filteredProducts = [...this.products];
-
-      // this.filterProducts();
 
       console.log(products);
     });
@@ -48,8 +44,24 @@ export class LandingComponent {
 
   filterProducts() {
     this.filteredProducts = this.products.filter((product) =>
-      product.productName.toLowerCase().includes(this.searchTearm.toLowerCase()));
+    product.productName.toLowerCase().includes(this.searchTearm.toLowerCase()) &&
+    (this.selectedCategory === '' || product.productCategory === this.selectedCategory)
+  );
+      
   }
+  selectedCategory: string = '';
+  onCategoryChange(event: any) {
+    this.selectedCategory = event.target.value;
+    this.filterProducts();
+  }
+  getUniqueCategories(): string[] {
+    const uniqueCategories = new Set<string>();
+    this.filteredProducts.forEach(product => {
+      uniqueCategories.add(product.productCategory);
+    });
+    return Array.from(uniqueCategories);
+  }
+
 
   ngOnInit(): void {
     this.singleService.clearCartIfEmailsMismatch();
