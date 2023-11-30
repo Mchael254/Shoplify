@@ -511,6 +511,27 @@
   transform: translateY(-3px);
 }
 
+.order{
+  display: flex;
+  border: solid green 2px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  text-decoration: none;
+  list-style: none;
+  color: #000000;
+  border: solid 1px #d9d9d9;
+}
+.order:hover{
+  background-color: #f8982d;
+  color: #ffffff;
+  border: solid 0px;
+  transform: translateY(-3px);
+}
+.order li{
+  margin: 0px 5px;
+}
+
 @media screen and (max-width:720px) {
   .nav {
     flex-wrap: wrap;

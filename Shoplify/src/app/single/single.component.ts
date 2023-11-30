@@ -37,25 +37,32 @@ export class SingleComponent {
 
 
   orderProduct() {
-    if(this.selectedProduct){
-      this.existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-      const existingCartItem = this.existingCartItems.find((item: any) => item.productID === this.selectedProduct.productID);
+    const userEmail = localStorage.getItem('user_email');
+    if(userEmail === 'michealvenum007@gmail.com'){
+      this.router.navigate(['/admin']);
+    }else{
+      if(this.selectedProduct){
+        this.existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        const existingCartItem = this.existingCartItems.find((item: any) => item.productID === this.selectedProduct.productID);
 
-      if (existingCartItem) {
-        existingCartItem.quantity += 1;
-      }else{
+        if (existingCartItem) {
+          existingCartItem.quantity += 1;
+        }else{
 
-       this. existingCartItems.push({ ...this.selectedProduct, quantity: 1 });
+         this. existingCartItems.push({ ...this.selectedProduct, quantity: 1 });
+        }
       }
+
+      this.selectedProduct.Quantity -= 0;
+      this.singleService.setCartItems(this.existingCartItems);
+
+      localStorage.setItem('cartItems', JSON.stringify(this.existingCartItems));
+
+      this.cartItemCount = this.existingCartItems.reduce((count, item) => count + item.quantity, 0);
+      this.cartVanish = false
+
     }
 
-    this.selectedProduct.Quantity -= 0;
-    this.singleService.setCartItems(this.existingCartItems);
-
-    localStorage.setItem('cartItems', JSON.stringify(this.existingCartItems));
-
-    this.cartItemCount = this.existingCartItems.reduce((count, item) => count + item.quantity, 0);
-    this.cartVanish = false
 
 
   }

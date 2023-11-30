@@ -12,8 +12,9 @@
   </div>
 
   <div class="accountIcon">
-    <a *ngIf="currentPage !== 'signup'" routerLink="/signup">Signup</a>
-    <a *ngIf="currentPage !== 'signin'" routerLink="/signin">Logout</a>
+    <a *ngIf="showOrders" routerLink="/order">Orders </a>
+    <a *ngIf="signup" routerLink="/signup">Signup</a>
+    <a *ngIf="signin" routerLink="/signin">Logout</a>
   </div>
 
 

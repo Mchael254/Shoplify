@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
@@ -7,21 +7,8 @@ import { NavigationEnd, Router } from '@angular/router';
   styleUrls: ['./navigation.component.css']
 })
 export class NavigationComponent {
-  [x: string]: any;
-
-  currentPage: string = ''
-  constructor(private router: Router) {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        this.currentPage = this.extractPageFromUrl(event.url);
-      }
-    });
-  }
-
-  private extractPageFromUrl(url: string): string {
-    const segments = url.split('/');
-    return segments[segments.length - 1];
-  }
-
+  @Input() showOrders: boolean = true;
+  @Input() signup: boolean = false;
+  @Input() signin: boolean = true;
 
 }

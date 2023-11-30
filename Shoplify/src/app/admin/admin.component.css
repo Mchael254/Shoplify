@@ -1,9 +1,6 @@
 .page-container {
   display: flex;
-  /* border: solid red 2px; */
-  /* height: 50svh; */
 }
-
 
 .company-logo {
   width: 20%;
@@ -152,27 +149,6 @@ display: flex;
 /* border: solid red 2px; */
 display: flex;
 flex-wrap: wrap;
-}
-
-
-
-.container span {
-border: solid 1px;
-border-color: #a09e9e;
-transition: transform 0.3s ease-in-out;
-padding: 3px;
-border-radius: 5px;
-font-size: 38px;
-color: #007BFF;
-}
-
-.container span:hover {
-transform: scale(1.2);
-}
-.container span .fab fa-twitter{
-color: #007BFF;
-background-color: #0056b3;
-
 }
 
 
@@ -337,16 +313,16 @@ opacity: 0;
   border-color: #D9D9D9;
 }
 .form-group select:focus{
-  border-color:rgb(72, 114, 179);
+  border-color:rgb#f8982d;
 
 }
 .form-group textarea:focus{
-  border-color:rgb(72, 114, 179);
+  border-color:rgb#f8982d;
 
 }
 .form-group input:focus {
 
-  border-color:rgb(72, 114, 179);
+  border-color:rgb#f8982d;
 }
 
 
@@ -393,68 +369,9 @@ opacity: 0;
   color:white;
   background-color: #b92121;
 }
-.delete{
-  margin: 5px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color:#ddd;
-  color: black;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 40px;
-
-}
-.delete:hover{
-  transform: scale(1.05);
-  color:white;
-  background-color: #b92121;
-
-}
-
-.complete{
-  margin: 5px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background-color:#ddd;
-  color: black;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  margin-left: 40px;
-}
-.complete:hover{
-  transform: scale(1.05);
-  color:white;
-  background-color: #25ac25;
-
-}
 
 
-/* delete authorization */
-#logincontainer {
-  position: relative;
-}
 
-.modal-overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
-}
 
 .updatecontainer {
   background: #fff;
@@ -462,58 +379,6 @@ opacity: 0;
   border-radius: 8px;
   text-align: center;
 }
-
-.yes,
-.no {
-  padding: 10px 20px;
-  margin: 0 10px;
-  cursor: pointer;
-}
-
-.yes {
-  padding: 10px 12px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  cursor: pointer;
-  color:#fff;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  border: solid 1px;
-  border-color: #D9D9D9;
-  background-color:rgb(72, 114, 179);
-}
-.yes:hover{
-  transform: translateY(-3px);
-box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-background-color: #b92121;
-color: #fff;
-}
-
-.no {
-  padding: 10px 14px;
-margin-top: 8px;
-margin-bottom: 8px;
-border-radius: 5px;
-cursor: pointer;
-color:#fff;
-text-transform: uppercase;
-transition: all 0.2s ease-in-out;
-border: solid 1px;
-border-color: #D9D9D9;
-background-color:rgb(72, 114, 179);
-}
-.no:hover{
-  transform: translateY(-3px);
-box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-background-color: #25ac25;
-
-color:#fff;
-
-}
-
-
-/* profile management */
 
 /* change form details */
 .magic{
@@ -543,85 +408,6 @@ color:#fff;
   /* border: 1px solid #ddd; */
   /* overflow-y: auto; */
 }
-
-
-/* profile management */
-#signupcontainer{
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color:white;
-  width: 30vw;
-  height: 90%;
-  box-shadow: 0px 10px 6px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  margin-bottom: 1.5rem;
-  /* border: solid green 2px; */
-}
-.formcontainer{
-  width: 60%;
-  padding: 1rem;
-}
-.formcontainer form{
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-#signupcontainer .formcontainer form label{
-  font-size: 1rem;
-}
-#signupcontainer #email-error,
-#signupcontainer #password-error{
-  color: red;
-}
-#signupcontainer .formcontainer form input{
-  padding: 10px;
-  margin: 15px 0px;
-  border-radius: 5px;
-  outline: none;
-  height: 25px;
-  border: solid 1px;
-  border-color: #D9D9D9;
-  font-size: large;
-
-}
-#signupcontainer .formcontainer form input:focus{
-  border-color:rgb(72, 114, 179);
-}
-#signupcontainer .formcontainer form button{
-  padding: 12px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  border-color: #D9D9D9;
-  background-color:#D9D9D9;
-  color:black;
-  font-weight: bold;
-  text-transform: uppercase;
-  transition: all 0.4s ease-in-out;
-  border: solid 1px;
-  border-color: #D9D9D9;
-  cursor: pointer;
-}
-
-#signupcontainer .formcontainer form button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-  background-color:rgb(72, 114, 179);
-  color:white ;
-}
-#signupcontainer .formcontainer a{
-  text-decoration: none;
-  text-transform: capitalize;
-  margin-top: 10px;
-  color:rgb(72, 114, 179);
-}
-#response{
-  color: red;
-  text-align: center;
-}
-
 
 
 /* client management */
@@ -670,9 +456,7 @@ color:#fff;
   margin-left: 40px;
 
 }
-.deletes:hover{
 
-}
 
 .softDelete{
   background-color:#f8982d;
@@ -690,5 +474,31 @@ color:#fff;
   background-color:black;
   transform: scale(1.05);
 
+}
+
+.cardss{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 8px;
+  padding: 10px;
+  min-width:300px;
+  min-height:450px;
+  max-width: 400px;
+  max-height: 280px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  cursor: pointer;
+
+}
+.cardss img{
+  width: 150px;
+}
+.cardss button:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
+  background-color:#f8982d;;
+  color:white ;
 }
 

@@ -8,6 +8,7 @@ import { CheckoutComponent } from './checkout/checkout.component';
 import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
 import { PasswordResetComponent } from './password-reset/password-reset.component';
 import { AdminComponent } from './admin/admin.component';
+import { OrdersComponent } from './orders/orders.component';
 
 const routes: Routes = [
   {path:'',redirectTo:'/landing',pathMatch:'full'},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path:'single',component:SingleComponent},
   {path:'checkout',component:CheckoutComponent},
   {path:'passwordReset',component:PasswordResetComponent},
+  {path:'orders',component:OrdersComponent},
   {path:'admin',component:AdminComponent},
   {path:'**',component:PagenotfoundComponent}
 ];

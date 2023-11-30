@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { UserService } from '../services/user.service';
 import { SinglepageService } from '../services/singlepage.service';
 import { AdminService } from '../services/admin.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -11,9 +12,12 @@ import { AdminService } from '../services/admin.service';
 })
 export class AdminComponent {
   constructor(private http: HttpClient, private adminService: AdminService,
-    private userService: UserService, private exploreService: SinglepageService) { }
-  //projects
+    private userService: UserService, private exploreService: SinglepageService,
+    private router:Router) { }
+
+  //product management
   products: any[] = [];
+  deletedProducts: any[] = [];
   filteredProducts: any[] = [];
   completedproductsCount: number = 0;
   ongoingproductsCount: number = 0;
@@ -21,15 +25,14 @@ export class AdminComponent {
   allproductsCount: number = 0;
   searchTearm: string = '';
 
-  userTickets: any[] = [];
-
 
   //forms
   showProductForm: boolean = false;
   showUpdateForm: boolean = false;
   showAcceptanceForm: boolean = false
+  deletedProduct: boolean = false
 
-  // projectForm types
+  // productForm types
   productForm: {
     productName: string;
     productDescription: string;
@@ -54,8 +57,6 @@ export class AdminComponent {
   mainError!: any
   updateResponse!: any
   productID!: any
-  isCompleted: boolean = false
-  isCompletedr: boolean = true
   isWhichError: boolean = false
   successResponse: string = ''
   successAssign: string = ''
@@ -64,8 +65,7 @@ export class AdminComponent {
   //authentication
   email: string = '';
   password: string = '';
-  loginError: string = '';
-  assignableEmployees: string[] = []
+  loginError: string = ''
 
   productctID: any;
 
@@ -81,6 +81,15 @@ export class AdminComponent {
   outOfStockCount: number = 0;
   inStockCount: number = 0;
 
+  //fetch soft deleted products
+  softDeletedProducts() {
+    this.adminService.softDeletedProducts().subscribe((deletedProducts: any) => {
+      this.deletedProducts = deletedProducts;
+
+    });
+  }
+
+  //fetch products
   fetchProducts() {
     this.adminService.fetchProducts().subscribe((products: any) => {
       this.products = products;
@@ -90,10 +99,9 @@ export class AdminComponent {
       this.filteredProducts = [...this.products];
 
       this.filterProducts();
-
-      // console.log(products);
     });
   }
+
 
   filterProducts() {
     this.filteredProducts = this.products.filter((product) =>
@@ -104,6 +112,12 @@ export class AdminComponent {
     this.productCount = this.products.length;
     this.outOfStockCount = this.products.filter(product => product.Quantity <= 5).length;
     this.inStockCount = this.products.filter(product => product.Quantity > 5).length;
+  }
+  inStock(){
+    this.filteredProducts = this.products.filter(product=> product.Quantity > 5)
+  }
+  outOfStock(){
+    this.filteredProducts = this.products.filter(product=> product.Quantity <= 5)
   }
 
 
@@ -123,7 +137,7 @@ export class AdminComponent {
   productDetails(product: any) {
     this.productctID = product.productID;
     this.productForm = {
-      
+
       productName: product.productName,
       productDescription: product.productDescription,
       productPrice: product.productPrice,
@@ -227,19 +241,36 @@ export class AdminComponent {
     );
   }
 
+  //delete product
   deleteProduct() {
-    const softDelete= {
+    const softDelete = {
       productID: this.productctID,
     };
     // console.log(softDelete);
-    const productID = this.productctID; 
+    const productID = this.productctID;
     this.adminService.deleteProduct(productID).subscribe(
       (response) => {
-        console.log('User deleted successfully', response);
+        console.log('Product deleted successfully', response);
         this.deleteSuccesss = true
         this.deleteSuccess = 'product deleted successfully'
-        this.showAcceptanceForm = false
+        this.softDeletedProducts()
+        this.fetchProducts()
+      },
+      (error) => {
+        console.error('Error deleting user', error);
+      }
+    );
 
+  }
+
+  //restore soft deleted product
+  restoreProduct(productID:any) {
+    console.log(productID);
+    this.adminService.restoreProduct(productID).subscribe(
+      (response) => {
+        // console.log('product restored successfully', response);
+        this.softDeletedProducts()
+        this.fetchProducts()
       },
       (error) => {
         console.error('Error deleting user', error);
@@ -249,53 +280,10 @@ export class AdminComponent {
   }
 
 
-
   ngOnInit() {
     this.fetchProducts();
+    this.softDeletedProducts();
 
-
-
-    //   //get admin  details
-    //   const userEmail = localStorage.getItem('user_email');
-    //   console.log(userEmail);
-    //   if (userEmail) {
-    //     this.userService.getUserDetails(userEmail).subscribe(
-    //       (response) => {
-    //         this.profiles = response.details
-    //         // console.log(response);
-    //         if (this.profiles && this.profiles.length > 0) {
-    //           const userDetail = this.profiles[0];
-    //           this.userName = userDetail.userName;
-    //           this.email = userDetail.email;
-    //           this.phone_no = userDetail.phone_no;
-    //           // this.password = userDetail.password;
-    //         }
-    //       },
-    //       (error) => {
-    //         console.error('Error fetching user details:', error);
-    //       }
-    //     );
-
-    //   }
-
-    //   //get all users
-    //   this.userService.getAllUsers().subscribe(
-    //     (data: any) => {
-
-    //       this.clients = data.users;
-    //       this.filteredClients = this.clients.filter(client => client.role !== 'admin');
-    //     },
-    //     (error: any) => {
-    //       console.error('Error fetching reviews:', error);
-    //     }
-    //   );
-
-  }
-
-
-  //complete product
-  completeproduct() {
-    this.showAcceptanceForm = true
   }
 
 
@@ -303,27 +291,10 @@ export class AdminComponent {
     this.showAcceptanceForm = false
   }
 
-  clearRegisterError(delay: number) {
-    setTimeout(() => {
-      this.loginError = '';
-    }, delay);
-  }
-
-  search() {
-
-
-  }
-
 
   //profile management
 
   dashboard: boolean = false
-  reviews: any[] = [];
-  sortedReviews: any[] = [];
-  unsortedReviews: any[] = [];
-  isReviewReceived: boolean = false;
-  reviewDiv: boolean = false
-  reviewss: any[] = [];
   profileview: boolean = false
   success: boolean = false;
   error: boolean = false
@@ -388,42 +359,13 @@ export class AdminComponent {
   //delete user
   deleteSuccesss: boolean = false
   deleteSuccess: string = ''
-  deletedUser() {
 
-  }
-  // deletesUser(email: string): void {
-  //   this.showAcceptanceForm = true
-
-  //   this.userService.deleteUser(email).subscribe(
-  //     (response) => {
-  //       console.log('User deleted successfully', response);
-  //       this.refreshUserList();
-  //       this.deleteSuccesss = true
-  //       this.deleteSuccess = 'User deleted successfully'
-  //       this.showAcceptanceForm = false
-
-  //     },
-  //     (error) => {
-  //       console.error('Error deleting user', error);
-  //     }
-  //   );
-  // }
-  // refreshUserList(): void {
-  //   this.userService.getAllUsers().subscribe(
-  //     (data: any) => {
-  //       this.clients = data.users;
-  //       this.filteredClients = this.clients.filter(client => client.role !== 'admin');
-  //     },
-  //     (error: any) => {
-  //       console.error('Error fetching reviews:', error);
-  //     }
-  //   );
-  // }
 
   Clients() {
     this.dashboard = true
     this.productDashboard = false
     this.profileview = false
+    this.deletedProduct = true
 
   }
 
