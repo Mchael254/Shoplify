@@ -30,7 +30,7 @@ describe("Order Controller", () => {
         mockResponse as Response
       );
 
-      //assertions- basic assertions for the orders controller
+      //Basic assertions for the orders controller
       expect(mockResponse.status).toHaveBeenCalledWith(201);
       expect(mockResponse.json).toHaveBeenCalledWith({
         success: true,
