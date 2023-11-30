@@ -8,11 +8,10 @@
     <div class="accountDropdown">
       <div class="filter">
         <select id="category"  (change)="onCategoryChange($event)">
-          <option value="">All</option>
-          <option value="Jewellery">Jewellery</option>
-          <option value="Electronics">Electronics</option>
-          <option value="Fashion Wear">Fashion wear</option>
-          <option value="men's clothing">Grocery</option>
+          <option value="">Categories</option>
+          <option value="Bikes">Bikes</option>
+          <option value="Spare Parts">Spare Parts</option>
+          <option value="Fashion">Fashion</option>
         </select>
       </div>
     </div>
@@ -71,6 +70,8 @@
                 <h3>{{ product.productName }}</h3>
                 <img [src]="product.productImage" alt="{{ product.productName }}">
                 <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
+                <p style="font-weight: bold; font-size: medium;">{{ product.productDescription}}..</p>
+
               </div>
             </ng-container>
 

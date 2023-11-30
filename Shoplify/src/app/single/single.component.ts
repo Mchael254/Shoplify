@@ -64,27 +64,32 @@ export class SingleComponent {
     }
 
 
-
   }
 
+outOfStock: boolean = false
   ngOnInit() {
-    const userEmails = localStorage.getItem('user_email');
-    console.log(userEmails);
-    
+    const userEmail = localStorage.getItem('user_email');
+   
     this.existingCartItems = this.singleService.getCartItems();
-
+  
     const productDetails = localStorage.getItem('selectedProduct');
+  
     if (productDetails) {
       this.selectedProduct = JSON.parse(productDetails);
-      console.log(this.selectedProduct.productName);
-
-      const existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
-      this.cartItemCount = existingCartItems.reduce((count:number, item:any) => count + item.quantity, 0);
-
+  
+      if (this.selectedProduct.Quantity > 0) {
+        const existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+        this.cartItemCount = existingCartItems.reduce((count: number, item: any) => count + item.quantity, 0);
+      } else {
+        this.outOfStock = true
+        this.cartVanish = false
+        return; 
+      }
     } else {
       console.error('No product details found in localStorage.');
     }
   }
+  
 
 
 
