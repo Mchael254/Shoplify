@@ -52,12 +52,11 @@ export class LandingComponent {
   }
 
   ngOnInit(): void {
+    this.singleService.clearCartIfEmailsMismatch();
     this.fetchProducts();
     const existingCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
     this.cartItemCount = existingCartItems.reduce((count:number, item:any) => count + item.quantity, 0);
 
-    // const existingCartItems = this.singleService.getCartItems();
-    // this.cartItemCount = existingCartItems.reduce((count, item) => count + item.quantity, 0);
 
   }
 
