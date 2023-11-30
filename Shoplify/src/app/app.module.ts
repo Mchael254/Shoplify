@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { SearchPipe } from './pipes/search.pipe';
 import { SinglepageService } from './services/singlepage.service';
+import { OrdersComponent } from './orders/orders.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { SinglepageService } from './services/singlepage.service';
     SigninComponent,
     SignupComponent,
     SingleComponent,
-    SearchPipe
+    SearchPipe,
+    OrdersComponent
   ],
   imports: [
     BrowserModule,

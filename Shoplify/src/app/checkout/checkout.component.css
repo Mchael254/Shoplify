@@ -209,6 +209,7 @@
   margin: 0px 90px;
 }
 .empty{
+  position: absolute;
   height: 60vh;
   width: 80vw;
   display: flex;
@@ -325,8 +326,6 @@
 }
 
 
-
-
 .payment-option {
   display: flex;
   align-items: center;
@@ -401,7 +400,7 @@
 .mainContainer{
   width: 98vw;
   height: 86vh;
-  /* border: solid green 2px; */
+  border: solid green 2px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -510,6 +509,27 @@
   color: #ffffff;
   border: solid 0px;
   transform: translateY(-3px);
+}
+
+.order{
+  display: flex;
+  border: solid green 2px;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  text-decoration: none;
+  list-style: none;
+  color: #000000;
+  border: solid 1px #d9d9d9;
+}
+.order:hover{
+  background-color: #f8982d;
+  color: #ffffff;
+  border: solid 0px;
+  transform: translateY(-3px);
+}
+.order li{
+  margin: 0px 5px;
 }
 
 @media screen and (max-width:720px) {
