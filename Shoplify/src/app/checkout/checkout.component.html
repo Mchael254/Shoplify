@@ -1,4 +1,4 @@
-<app-navigation></app-navigation>
+<app-navigation ></app-navigation>
 <div class="buy">
 
   <div class="account">
@@ -15,6 +15,16 @@
         <a href="/views/signin.html">Product</a>
         <a href="/views/signup.html">Account</a>
       </div>
+    </div>
+    <div class="orderss">
+      <a routerLink="/orders" class="order">
+        <li>
+          <span class="material-symbols-outlined">
+            shopping_bag
+          </span>
+        </li>
+        <li>Orders</li>
+      </a>
     </div>
     <div class="cart">
       <a routerLink="/checkout" class="carts">
@@ -67,7 +77,7 @@
 
   <div *ngIf="orderMade" class="modal-overlay">
     <div class="updateContainer">
-     <p>Order made successfully</p>
+      <p>Order made successfully</p>
     </div>
   </div>
 

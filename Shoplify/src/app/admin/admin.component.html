@@ -1,21 +1,19 @@
-<app-navigation></app-navigation>
+<app-navigation [showOrders]="false"></app-navigation>
+
 
 <div class="page-container">
   <div class="company-logo">
 
     <p style="font-size: 50px;">Manager</p>
     <div class="manager">
-
-      <button class="profile" (click)="profileManager()">Profile</button>
-      <button class="profile" (click)="Clients()">Clients</button>
+      <button class="profile" (click)="Clients()">Restricted</button>
       <button class="profile" (click)="product()">Products</button>
     </div>
 
     <div class="buttonss">
       <button class="side" (click)="addProduct()">Add Product</button>
-      <button class="side" (click)="fetchProducts()">All products</button>
-      <!-- <button class="side" (click)="filterProducts('outOfStock')">Out of Stock</button> -->
-      <!-- <button class="side" (click)="filterProducts('inStock')">In Stock</button> -->
+      <button class="side" (click)="inStock()">inStock</button>
+      <button class="side" (click)="outOfStock()">outOfStock</button>
     </div>
   </div>
 
@@ -28,8 +26,8 @@
       <p class="top">
         <span>
           <input type="text" placeholder="Search Product"
-          style="border: solid 1px #a09e9e; height: 50px; width: 300px; text-align: center; font-size: large; border: 0px solid;"
-          [(ngModel)]="searchTearm" (input)="filterProducts()" />
+            style="border: solid 1px #a09e9e; height: 50px; width: 300px; text-align: center; font-size: large; border: 0px solid;"
+            [(ngModel)]="searchTearm" (input)="filterProducts()" />
         </span>
       </p>
     </div>
@@ -46,53 +44,17 @@
 
   </div>
 
+  <!-- soft deleted product -->
   <div *ngIf="dashboard" class="client-container">
 
-    <!-- <div *ngIf="filteredClients" class="clientCard"> -->
-
-    <!-- <div *ngFor="let client of filteredClients" class="card"> -->
-    <!-- <h4>{{ client.userName }}</h4> -->
-    <!-- <p style="font-size: medium;"><span style="font-weight: bold;">User Email: </span>{{ -->
-    <!-- client.email }}</p> -->
-    <!-- <p style="font-size: medium;"><span style="font-weight: bold;">Phone no: </span>{{ -->
-    <!-- client.phone_no }}</p> -->
-
-    <!-- <button class="deletes" (click)="showAcceptanceForm=true">Delete</button> -->
-    <!-- <div id="logincontainer"> -->
-    <!-- <div *ngIf="showAcceptanceForm" class="modal-overlay"> -->
-    <!-- <div class="updatecontainer"> -->
-    <!-- <p>Do you want to delete?</p> -->
-    <!-- <p *ngIf="deleteSuccesss">{{deleteSuccess}}</p> -->
-    <!-- <!~~ <button (click)="deletesUser(client.email)" class="yes">Yes</button> ~~> -->
-    <!-- <button (click)="closeAuth()" class="no">No</button> -->
-    <!-- </div> -->
-    <!-- </div> -->
-    <!-- </div> -->
-    <!-- </div> -->
-    <!-- </div> -->
-
-  </div>
-
-  <!--  profile management -->
-  <div *ngIf="profileview" class="magic">
-    <div id="signupcontainer">
-      <h2>Profile Maanagement</h2>
-      <div class="formcontainer">
-        <form id="signup-form" (ngSubmit)="updateSubmit()">
-          <p *ngIf="success" style="color: #007BFF;" id="response">{{ successUpdate }}</p>
-          <p *ngIf="error" id="response">{{ updateError }}</p>
-          <label>User Name</label>
-          <input type="text" placeholder="username" [(ngModel)]="userName" name="userName">
-          <label>Email address</label>
-          <input type="email" placeholder="example@gmail.com" [(ngModel)]="email" name="email">
-          <label>Phone_no</label>
-          <input type="text" placeholder="phone number" [(ngModel)]="phone_no" name="phone_no">
-          <label>Password</label>
-          <input type="password" [(ngModel)]="password" name="password">
-          <label>Confirm Password</label>
-          <input type="password" [(ngModel)]="confirm_password" name="confirm_password">
-          <button type="submit">accept >>></button>
-        </form>
+    <div *ngIf=" deletedProduct" class="clientCard">
+      <div *ngFor="let deletedProduct of deletedProducts" class="cardss">
+        <h4 style="color: black;">{{ deletedProduct.productName }}</h4>
+        <img src="{{deletedProduct.productImage}}">
+        <p style="font-size: medium;"><span style="font-weight: bold;">Ksh: </span>{{
+          deletedProduct.productPrice }}</p>
+          <p style="display: none;">{{deletedProduct.productID}}</p>
+          <button class="deletes" (click)="restoreProduct(deletedProduct.productID)">restore</button>
       </div>
     </div>
 
@@ -136,8 +98,8 @@
           </div>
           <div class="form-group">
             <label for="Quantity">Quantity:</label>
-            <input type="number" id="Slots" placeholder="Quantity available" name="Quantity" [(ngModel)]="productForm.Quantity"
-              required />
+            <input type="number" id="Slots" placeholder="Quantity available" name="Quantity"
+              [(ngModel)]="productForm.Quantity" required />
           </div>
           <div class="form-group">
             <label for="productContact">Supplier Contact:</label>
@@ -165,14 +127,14 @@
     <div class="product-form product-form-transition">
       <form id="product-form" (ngSubmit)="updateProductForm()">
         <p style="margin: 10px; color: red">{{ updateResponse }}</p>
-        <p style="margin: 10px; color: blue;font-size: 40px;">{{ successResponse }}</p>
+        <p style="margin: 10px; color: blue;font-size: 30px;">{{ successResponse }}</p>
         <!-- product Info -->
         <p style="font-size: medium; font-weight: bold">product Highlights</p>
         <div class="productInfo">
           <div class="form-group">
             <label for="productName">product Name:</label>
-            <input type="text" id="productName" placeholder="product Name" name="productName" [(ngModel)]="productForm.productName"
-              required />
+            <input type="text" id="productName" placeholder="product Name" name="productName"
+              [(ngModel)]="productForm.productName" required />
           </div>
           <div class="form-group">
             <label for="productImage">product Image</label>
@@ -196,7 +158,8 @@
           </div>
           <div class="form-group">
             <label for="Slots">Quantity:</label>
-            <input type="number" id="Slots" placeholder="Slots" name="Slots" [(ngModel)]="productForm.Quantity" required />
+            <input type="number" id="Slots" placeholder="Slots" name="Slots" [(ngModel)]="productForm.Quantity"
+              required />
           </div>
           <div class="form-group">
             <label for="productContact">product Contact:</label>
@@ -210,14 +173,13 @@
           </div>
           <input type="hidden" id="productID" name="productID" [(ngModel)]="productID" />
         </div>
-        
+
         <button (click)="closeUpdate()" class="close">Close</button>
         <button type="submit" class="formSubmit">Update Product</button>
         <button class="softDelete" (click)="deleteProduct()">Delete</button>
-      
+
       </form>
     </div>
   </div>
-
 
 </div>

@@ -26,7 +26,7 @@ export class CheckoutComponent {
   showAcceptanceForm: boolean = false;
   totalAmount: number = 0;
   summary: boolean = false;
-  userEmail: any 
+  userEmail: any
 
 
   reduce(item: any) {
@@ -113,18 +113,22 @@ export class CheckoutComponent {
       items: this.existingCartItems.map(item => ({
         productID: item.productID,
         quantity: item.quantity,
-        productPrice: item.productPrice
+        productPrice: item.productPrice,
+        
+        productDescription:item.productDescription,
+        productImage:item.productImage,
+        productName:item.productName
       }))
     };
     console.log(orderDetails);
-    
+
     this.checkoutService.makeOrder(orderDetails).subscribe(
       response => {
         this.orderMade = true;
-        setTimeout(() => { 
+        setTimeout(() => {
           this.orderMade = false;
         }, 2000);
-        
+
         console.log(response);
         localStorage.setItem('cartItems', '[]');
         this.existingCartItems = [];
@@ -134,7 +138,7 @@ export class CheckoutComponent {
       },
       error => {
         console.error(error);
-        
+
       }
     );
   }

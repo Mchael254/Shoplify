@@ -13,6 +13,7 @@ export class AdminService {
   private errorResponse: string = '';
 
   private apiUrl = 'http://localhost:5400/product';
+  private softDeletedapiUrl = 'http://localhost:5400/product/softDeletedProducts';
 
   private createProductUrl = 'http://localhost:5400/product/createProduct';
 
@@ -53,10 +54,23 @@ export class AdminService {
     return this.errorResponse;
   }
 
-  //fetchTours
+  //fetchProducts
   fetchProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl);
   }
+
+  //fetch soft deleted products
+  softDeletedProducts(): Observable<any[]> {
+    return this.http.get<any[]>(this.softDeletedapiUrl);
+  }
+
+  //restore soft deleted product
+  restoreProduct(productID: string): Observable<any> {
+    const url = `${this.apiUrl}/restoreProduct?productID=${productID}`;
+    return this.http.put(url, {}); 
+  }
+
+
 
   //update product
   updateProduct(productDataUpdate: any): Observable<any> {
@@ -69,6 +83,6 @@ export class AdminService {
       const url = `${this.apiUrl}/deleteProduct?productID=${productID}`;
       return this.http.delete(url);
     }
-  
+
 
 }
