@@ -13,4 +13,23 @@ use Shopie
 --     isOrder bit DEFAULT 0
 -- )
 
+
+alter table Users
+add emailSent bit DEFAULT 0
+-- drop column passwordReset
+
+-- Identify the default constraint
+
+
+alter table Users
+-- add expiryTime int
+-- add resetToken varchar(255) null
+add expiryTime int
+
+-- add passwordReset bit DEFAULT 0 
+-- add review VARCHAR(250)
+
 select * from Users
+
+delete from Users 
+where email = 'james@gmail.com'

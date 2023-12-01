@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { v4 } from "uuid";
 import { sqlConfig } from "../config/sqlConfig";
-import {  userLoginValidationSchema, userRegisterValidationSchema } from "../validators/userValidators";
+import {  passwordResetRequestValidationSchema, passwordResetValidationSchema, userLoginValidationSchema, userRegisterValidationSchema } from "../validators/userValidators";
 import { ExtendedUser } from "../middleware/tokenVerify";
 
 
@@ -126,3 +126,105 @@ export const checkUserDetails = async (req: ExtendedUser, res: Response) => {
         })
     }
 }
+
+//initiate password reset
+export const initiate_password_reset = async (req: Request, res: Response) => {
+    try {
+      const { email } = req.body;
+      const { error } = passwordResetRequestValidationSchema.validate(req.body);
+  
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+  
+      const resetToken = generateRandomToken();
+      const expiryTime = calculateExpiryTime();
+  
+      const pool = await mssql.connect(sqlConfig);
+  
+      const resetResult = await pool
+        .request()
+        .input('email', mssql.VarChar, email)
+        .input('resetToken', mssql.VarChar, resetToken)
+        .input('expiryTime', mssql.Numeric, expiryTime)
+        .execute('initiate_password_reset');
+  
+      if (resetResult.recordset && resetResult.recordset.length > 0) {
+        const message = resetResult.recordset[0].message;
+        if (message === 'Password reset initiated') {
+          return res.status(200).json({ message: `password reset initiated check ${email} for more details` });
+        } else {
+          return res.status(400).json({ message: 'email not found.' });
+        }
+      } else {
+        return res.status(500).json({
+          message: 'Error initiating password reset',
+        });
+      }
+    } catch (error: any) {
+      console.error('Error with the password reset', error);
+      return res.status(500).json({
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  };
+  
+  const generateRandomToken = () => {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  };
+  
+  const calculateExpiryTime = () => {
+    return Math.floor(Date.now() / 1000) + 3600;
+  };
+
+  //reser password
+  export const resetPassword = async (req: Request, res: Response) => {
+    try {
+      const { email, newPassword, token } = req.body;
+  
+      const { error } = passwordResetValidationSchema.validate(req.body);
+  
+      if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+      }
+  
+      const hashedPwd = await bcrypt.hash(newPassword, 5);
+  
+      const pool = await mssql.connect(sqlConfig);
+  
+      const resetResult = await pool
+        .request()
+        .input('email', mssql.VarChar, email)
+        .input('newPassword', mssql.VarChar, hashedPwd)
+        .input('token', mssql.VarChar, token)
+        .execute('updatePassword');
+  
+      if (resetResult.recordset && resetResult.recordset.length > 0) {
+        const message = resetResult.recordset[0].message;
+  
+        if (message === 'Password updated successfully') {
+          return res.status(200).json({ message: 'Password reset successful' });
+        } else if (message === 'Invalid token') {
+          return res.status(400).json({ message: 'Invalid reset token' });
+        } else if (message === 'Invalid email') {
+          return res.status(400).json({ message: 'Invalid email' });
+        } else {
+          return res.status(500).json({
+            message: 'Error resetting password',
+          });
+        }
+      } else {
+        return res.status(500).json({
+          message: 'Error resetting password',
+        });
+      }
+    } catch (error: any) {
+      console.error('Error with the password reset', error);
+      return res.status(500).json({
+        message: 'Internal Server Error',
+        error: error.message,
+      });
+    }
+  };
+  
