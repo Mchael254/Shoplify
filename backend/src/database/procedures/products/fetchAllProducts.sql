@@ -2,9 +2,10 @@
 
 -- use Shopie
 
-create procedure fetchAllProducts
+create or alter procedure fetchAllProducts
 as
 begin
 
-select * from Tours
+select * from Products
+where isDeleted = 0
 end

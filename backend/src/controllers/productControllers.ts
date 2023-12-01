@@ -65,6 +65,25 @@ export const getAllproducts = async (req: Request, res: Response) => {
     }
 }
 
+//fetch all softDeleted products
+export const softDeletedProducts = async (req: Request, res: Response) => {
+    try {
+        const pool = await mssql.connect(sqlConfig);
+        const result = await pool.request().execute("allProducts");
+
+        if (result.recordset && result.recordset.length > 0) {
+            const products = result.recordset;
+            return res.status(200).json(products);
+        } else {
+            return res.status(200).json([]);
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: error
+        });
+    }
+}
+
 //update product
 export const updateProduct = async (req: Request, res: Response) => {
     try {
@@ -107,3 +126,50 @@ export const updateProduct = async (req: Request, res: Response) => {
         });
     }
 }
+
+//delete product
+ export const deleteProduct = async (req: Request, res: Response) => {
+    try {
+      const { productID } = req.query;
+  
+      const pool = await mssql.connect(sqlConfig);
+  
+      const result = await pool
+        .request()
+        .input('productID', mssql.VarChar, productID)
+        .execute('softDeleteProduct');
+  
+      if (result.rowsAffected[0] > 0) {
+        return res.status(200).json({ message: 'Product deleted successfully' });
+      } else {
+        return res.status(400).json({ error: 'Failed to delete product' });
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  //restore product
+    export const restoreProduct = async (req: Request, res: Response) => {
+        try {
+        const { productID } = req.query;
+    
+        const pool = await mssql.connect(sqlConfig);
+    
+        const result = await pool
+            .request()
+            .input('productID', mssql.VarChar, productID)
+            .execute('restoreProduct');
+    
+        if (result.rowsAffected[0] > 0) {
+            return res.status(200).json({ message: 'Product restored successfully' });
+        } else {
+            return res.status(400).json({ error: 'Failed to restore product' });
+        }
+        } catch (error) {
+        console.error('Error deleting user:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+        }
+    };
+  
