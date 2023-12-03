@@ -11,7 +11,7 @@
     </div>
 
     <div class="buttonss">
-      <button class="side" (click)="addProduct()">Add Product</button>
+      <button class="side" (click)="addProduct()" data-cy="add-btn">Add Product</button>
       <button class="side" (click)="inStock()">inStock</button>
       <button class="side" (click)="outOfStock()">outOfStock</button>
     </div>
@@ -73,12 +73,12 @@
         <div class="productInfo">
           <div class="form-group">
             <label for="productName">Product Name:</label>
-            <input type="text" id="productName" placeholder="Product Name" name="productName"
+            <input type="text" id="productName" placeholder="Product Name" name="productName" data-cy="product-name"
               [(ngModel)]="productForm.productName" required />
           </div>
           <div class="form-group">
             <label for="productImage">Product Image</label>
-            <input type="text" id="productImage" placeholder="Product Image URL" name="productImage"
+            <input type="text" id="productImage" placeholder="Product Image URL" name="productImage" data-cy="product-image"
               [(ngModel)]="productForm.productImage" required />
           </div>
           <div class="form-group">
@@ -92,22 +92,22 @@
           </div>
           <div class="form-group">
             <label for="productPrice">Product Price:</label>
-            <input type="number" id="productPrice" placeholder="Product Price" name="productPrice"
+            <input type="number" id="productPrice" placeholder="Product Price" name="productPrice" data-cy="product-price"
               [(ngModel)]="productForm.productPrice" required />
           </div>
           <div class="form-group">
             <label for="Quantity">Quantity:</label>
-            <input type="number" id="Slots" placeholder="Quantity available" name="Quantity"
+            <input type="number" id="Slots" placeholder="Quantity available" name="Quantity" data-cy="product-quantity"
               [(ngModel)]="productForm.Quantity" required />
           </div>
           <div class="form-group">
             <label for="productContact">Supplier Contact:</label>
-            <input type="text" id="supplierContact" placeholder="Supplier Contact" name="supplierContact"
+            <input type="text" id="supplierContact" placeholder="Supplier Contact" name="supplierContact" data-cy="supplier-contact"
               [(ngModel)]="productForm.supplierContact" required />
           </div>
           <div class="form-group">
             <label for="productDescription">Product Description:</label>
-            <textarea id="productDescription" placeholder="Product Description" name="productDescription"
+            <textarea id="productDescription" placeholder="Product Description" name="productDescription" data-cy="product-description"
               [(ngModel)]="productForm.productDescription" required></textarea>
           </div>
         </div>
@@ -115,7 +115,7 @@
         <p style="margin: 10px; color: black">{{ updateResponse }}</p>
         <p [style.color]="isWhichError ? 'black' : 'red'">{{ errorResponse }}</p>
         <button (click)="closeProduct()" class="close">Close</button>
-        <button type="submit" class="formSubmit">Create Product</button>
+        <button type="submit" class="formSubmit" data-cy="add-product-btn">Create Product</button>
       </form>
     </div>
   </div>
@@ -132,7 +132,7 @@
         <div class="productInfo">
           <div class="form-group">
             <label for="productName">product Name:</label>
-            <input type="text" id="productName" placeholder="product Name" name="productName"
+            <input type="text" id="productName" placeholder="product Name" name="productName"  data-cy="product-price"
               [(ngModel)]="productForm.productName" required />
           </div>
           <div class="form-group">
@@ -151,7 +151,7 @@
           </div>
           <div class="form-group">
             <label for="productPrice">Product Price:</label>
-            <input type="number" id="productPrice" placeholder="Product Price" name="productPrice"
+            <input type="number" id="productPrice" placeholder="Product Price" name="productPrice" data-cy="product-price"
               [(ngModel)]="productForm.productPrice" required />
           </div>
           <div class="form-group">

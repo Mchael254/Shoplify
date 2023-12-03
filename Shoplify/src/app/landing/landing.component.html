@@ -66,7 +66,7 @@
           <div class="inner">
             
             <ng-container *ngFor="let product of filteredProducts">
-              <div class="cards" (click)="productClick(product)" *ngIf="product.productCategory === category">
+              <div class="cards" (click)="productClick(product)" *ngIf="product.productCategory === category" data-cy=product >
                 <h3>{{ product.productName }}</h3>
                 <img [src]="product.productImage" alt="{{ product.productName }}">
                 <p style="font-weight: bold; font-size: medium;">Ksh {{ product.productPrice}}</p>
@@ -88,7 +88,7 @@
 
 
 
-
+<!--          gamesmy177@gmail.com           -->
 
 
 
